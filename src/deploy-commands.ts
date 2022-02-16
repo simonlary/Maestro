@@ -16,7 +16,7 @@ async function getApplicationId(token: string) {
 }
 
 console.log("Loading config...");
-const config = await Config.load();
+const config = new Config();
 
 console.log("Fetching application id...");
 const applicationId = await getApplicationId(config.token);
