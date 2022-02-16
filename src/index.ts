@@ -19,3 +19,7 @@ try {
 process.addListener("SIGINT", () => {
     bot.shutdown();
 });
+
+process.addListener("SIGTERM", () => {
+    bot.shutdown();
+});
