@@ -205,7 +205,7 @@ export class Bot {
         activeGuild.voiceConnection.destroy();
         this.activeGuilds.delete(activeGuild.guildId);
 
-        await interaction.reply({ content: "Stopped playback." });
+        await interaction.reply({ content: "Stopped playback.", ephemeral: true });
     };
 
     private skip = async (interaction: CommandInteraction) => {
@@ -291,6 +291,6 @@ export class Bot {
         if (activeGuild.queue.length > 0) {
             embed.addField("Queue", activeGuild.queue.map((s, i) => `${i + 1}. [${s.title}](${s.url})`).join("\n"));
         }
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], ephemeral: true });
     };
 }
