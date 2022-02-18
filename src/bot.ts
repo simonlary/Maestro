@@ -2,6 +2,7 @@ import { Client, CommandInteraction, Intents, Interaction, MessageEmbed } from "
 import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus } from "@discordjs/voice";
 import playdl from "play-dl";
 import { Config } from "./config.js";
+import { registerCommands } from "./registerCommands.js";
 
 interface Song {
     title: string;
@@ -31,6 +32,9 @@ export class Bot {
 
         console.log("Logging in...");
         await client.login(config.token);
+
+        console.log("Registering commands...");
+        await registerCommands(client, config);
 
         return bot;
     }

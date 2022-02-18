@@ -15,8 +15,7 @@
 		"lint": "eslint src/** --fix",
 		"build": "tsc",
 		"start": "npm run build && npm run deploy",
-		"deploy": "node ./out/index.js",
-		"deploy-commands": "npm run build && node ./out/deploy-commands.js"
+		"deploy": "node ./out/index.js"
 	},
 	"dependencies": {
 		"@discordjs/builders": "^0.12.0",
