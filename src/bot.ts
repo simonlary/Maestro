@@ -36,6 +36,7 @@ export class Bot {
         console.log("Registering commands...");
         await registerCommands(client, config);
 
+        console.log("Bot started!");
         return bot;
     }
 
@@ -43,7 +44,6 @@ export class Bot {
         private readonly config: Config,
         private readonly client: Client,
     ) {
-        this.client.on("ready", () => console.log("Ready!"));
         this.client.on("disconnect", () => { console.log("Disconnected"); });
         this.client.on("interactionCreate", this.onInteractionCreate);
     }
