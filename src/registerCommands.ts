@@ -11,6 +11,7 @@ export async function registerCommands(client: Client, config: Config) {
     }
 
     const play = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("play")
         .setDescription("Add a video/song to the queue.")
         .addSubcommand((subcommand) =>
@@ -37,22 +38,27 @@ export async function registerCommands(client: Client, config: Config) {
         )
         .toJSON();
     const stop = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("stop")
         .setDescription("Stop the music playback.")
         .toJSON();
     const skip = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("skip")
         .setDescription("Skip the currently playing song.")
         .toJSON();
     const pause = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("pause")
         .setDescription("Pause the currently playing song.")
         .toJSON();
     const resume = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("resume")
         .setDescription("Resume the currently paused song.")
         .toJSON();
     const queue = new SlashCommandBuilder()
+        .setDMPermission(false)
         .setName("queue")
         .setDescription("Show the currently queued songs.")
         .toJSON();
