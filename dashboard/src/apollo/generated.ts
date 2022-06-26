@@ -22,6 +22,7 @@ export type Guild = {
   icon: Scalars['String'];
   id: Scalars['String'];
   name: Scalars['String'];
+  playbackStatus: PlaybackStatus;
   queue: Array<Song>;
 };
 
@@ -36,6 +37,11 @@ export type Log = {
 export type Mutation = {
   __typename?: 'Mutation';
   registerCommands: Scalars['Boolean'];
+};
+
+export type PlaybackStatus = {
+  __typename?: 'PlaybackStatus';
+  isPlaying: Scalars['Boolean'];
 };
 
 export type Query = {
@@ -73,7 +79,7 @@ export type GuildQueryVariables = Exact<{
 }>;
 
 
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }> } };
 
 export type LogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -133,6 +139,9 @@ export const GuildDocument = gql`
       url
       thumbnail
       duration
+    }
+    playbackStatus {
+      isPlaying
     }
     queue {
       title

@@ -1,3 +1,4 @@
+import { AudioPlayerStatus } from "@discordjs/voice";
 import { Arg, Query, Resolver } from "type-graphql";
 import { Bot } from "../bot.js";
 import { Guild } from "../schema/guild.js";
@@ -13,6 +14,9 @@ export function createGuildResolver(bot: Bot) {
           name: activeGuild.guildInfo.name,
           icon: activeGuild.guildInfo.icon,
           currentlyPlaying: activeGuild.currentlyPlaying,
+          playbackStatus: {
+            isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing
+          },
           queue: activeGuild.queue,
         };
       });
@@ -29,6 +33,9 @@ export function createGuildResolver(bot: Bot) {
         name: guild.guildInfo.name,
         icon: guild.guildInfo.icon,
         currentlyPlaying: guild.currentlyPlaying,
+        playbackStatus: {
+          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing
+        },
         queue: guild.queue,
       };
     }

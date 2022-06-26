@@ -42,7 +42,7 @@ export function GuildPage() {
       <div className="bg-gray-text h-0.5" />
 
       <div className="h-20 bg-gray-2">
-        <Player song={data?.guild.currentlyPlaying} />
+        <Player song={data?.guild.currentlyPlaying} playbackStatus={data?.guild.playbackStatus} />
       </div>
     </div>
   );

@@ -81,9 +81,15 @@ export class Bot {
       return;
     }
 
-    logger.info(
-      `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
-    );
+    if (interaction.guild != null) {
+      logger.info(
+        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}" in guild "${interaction.guild.name}" (${interaction.guild.id}).`
+      );
+    } else {
+      logger.info(
+        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
+      );
+    }
 
     try {
       switch (interaction.commandName) {

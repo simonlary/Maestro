@@ -1,8 +1,8 @@
 import { RiPauseFill, RiPlayFill, RiSkipBackFill, RiSkipForwardFill } from "react-icons/ri";
-import { Song } from "../../../../apollo/generated";
+import { PlaybackStatus, Song } from "../../../../apollo/generated";
 
-export function Player({ song }: { song?: Song }) {
-  const isPlaying = true;
+export function Player({ song, playbackStatus }: { song?: Song; playbackStatus?: PlaybackStatus }) {
+  const isPlaying = playbackStatus?.isPlaying || false;
 
   function resume() {
     return;

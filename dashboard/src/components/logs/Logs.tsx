@@ -7,9 +7,7 @@ export function Logs() {
 
   useEffect(() => {
     startPolling(1000);
-    return () => {
-      stopPolling();
-    };
+    return () => stopPolling();
   }, [startPolling, stopPolling]);
 
   const logs = data?.logs ?? [];

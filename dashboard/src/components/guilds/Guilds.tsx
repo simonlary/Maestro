@@ -1,9 +1,15 @@
 import { Outlet } from "react-router-dom";
 import { GuildList } from "./GuildList";
 import { useGuildsQuery } from "../../apollo/generated";
+import { useEffect } from "react";
 
 export function Guilds() {
-  const { data, loading } = useGuildsQuery();
+  const { data, loading, startPolling, stopPolling } = useGuildsQuery();
+
+  useEffect(() => {
+    startPolling(3000);
+    return () => stopPolling();
+  }, [startPolling, stopPolling]);
 
   return (
     <div className="h-full flex">

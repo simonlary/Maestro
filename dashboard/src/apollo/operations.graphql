@@ -15,6 +15,9 @@ query guild($guildId: String!) {
       thumbnail
       duration
     }
+    playbackStatus {
+      isPlaying
+    }
     queue {
       title
       url
