@@ -1,0 +1,17 @@
+query guilds {
+  guilds {
+    id
+    name
+    icon
+    currentlyPlaying {
+      title
+      url
+      thumbnail
+    }
+    queue {
+      title
+      url
+      thumbnail
+    }
+  }
+}
