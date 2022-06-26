@@ -4,13 +4,20 @@ import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
 
+interface GuildInfo {
+    id: Snowflake;
+    name: string;
+    icon: string | null;
+}
+
 interface Song {
     title: string;
     url: string;
+    thumbnail: string;
 }
 
 interface ActiveGuild {
-    guildId: Snowflake;
+    guildInfo: GuildInfo;
     voiceConnection: VoiceConnection;
     audioPlayer?: AudioPlayer;
     queue: Song[];
@@ -46,17 +53,6 @@ export class Bot {
     ) {
         this.client.on("disconnect", () => { console.log("Disconnected"); });
         this.client.on("interactionCreate", this.onInteractionCreate);
-    }
-
-    public getGuildInfos(guildId: Snowflake) {
-        const guild = this.client.guilds.cache.get(guildId);
-        if (guild == null) {
-            throw new Error(`Guild with id ${guildId} not found!`);
-        }
-        return {
-            name: guild.name,
-            icon: guild.iconURL(),
-        };
     }
 
     public getActiveGuilds() {
@@ -160,6 +156,7 @@ export class Bot {
         const song = {
             title: songInfo.video_details.title ?? "",
             url: songInfo.video_details.url,
+            thumbnail: songInfo.video_details.thumbnails[0].url,
         };
 
         const activeGuild = this.activeGuilds.get(guildId);
@@ -169,7 +166,8 @@ export class Bot {
                 guildId,
                 adapterCreator: interaction.guild.voiceAdapterCreator,
             });
-            const newActiveGuild = { guildId, voiceConnection, queue: [song], };
+            const guildInfo = { id: guildId, name: interaction.guild.name, icon: interaction.guild.iconURL() };
+            const newActiveGuild = { guildInfo, voiceConnection, queue: [song], };
             this.activeGuilds.set(guildId, newActiveGuild);
             await entersState(voiceConnection, VoiceConnectionStatus.Ready, 5_000);
             await this.playNext(newActiveGuild);
@@ -181,7 +179,7 @@ export class Bot {
             .setTitle("Queued Song")
             .setColor(0x6BED0E)
             .setDescription(`[${song.title}](${song.url})`)
-            .setThumbnail(songInfo.video_details.thumbnails[0].url);
+            .setThumbnail(song.thumbnail);
         await interaction.editReply({ content: "Successfully added a song to the queue!" });
         await interaction.followUp({ embeds: [embed] });
     };
@@ -190,7 +188,7 @@ export class Bot {
         activeGuild.currentlyPlaying = activeGuild.queue.shift();
         if (activeGuild.currentlyPlaying == null) {
             activeGuild.voiceConnection.destroy();
-            this.activeGuilds.delete(activeGuild.guildId);
+            this.activeGuilds.delete(activeGuild.guildInfo.id);
             return;
         }
 
@@ -218,7 +216,7 @@ export class Bot {
         }
 
         activeGuild.voiceConnection.destroy();
-        this.activeGuilds.delete(activeGuild.guildId);
+        this.activeGuilds.delete(activeGuild.guildInfo.id);
 
         await interaction.reply({ content: "Stopped playback.", ephemeral: true });
     };
