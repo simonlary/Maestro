@@ -4,11 +4,14 @@ import { Bot } from "./bot.js";
 import { Config } from "./config.js";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { ApolloServer } from "apollo-server";
 import { createGuildResolver } from "./resolvers/guildResolver.js";
 import { createSettingsResolver } from "./resolvers/settingsResolver.js";
 import { createLogResolver } from "./resolvers/logResolver.js";
 import { logger } from "./logger.js";
+import { ApolloServer } from "apollo-server-express";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import express from "express";
+import http from "http";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,14 +27,21 @@ const schema = await buildSchema({
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
 });
 
+logger.info("Creating Express server...");
+const app = express();
+const httpServer = http.createServer(app);
+
 logger.info("Creating Apollo server...");
 const server = new ApolloServer({
   schema,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
 logger.info("Starting Apollo server...");
-const { url } = await server.listen({ port: config.apolloServerPort });
-logger.info(`Listening on: ${url}`);
+await server.start();
+server.applyMiddleware({ app, path: "/" });
+await new Promise<void>((resolve) => httpServer.listen({ port: config.apolloServerPort }, resolve));
+logger.info(`Listening on: http://localhost:/${config.apolloServerPort}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();
