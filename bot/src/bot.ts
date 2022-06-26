@@ -14,6 +14,7 @@ interface Song {
     title: string;
     url: string;
     thumbnail: string;
+    duration: number;
 }
 
 interface ActiveGuild {
@@ -157,6 +158,7 @@ export class Bot {
             title: songInfo.video_details.title ?? "",
             url: songInfo.video_details.url,
             thumbnail: songInfo.video_details.thumbnails[0].url,
+            duration: songInfo.video_details.durationInSec,
         };
 
         const activeGuild = this.activeGuilds.get(guildId);

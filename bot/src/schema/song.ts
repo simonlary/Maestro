@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Song {
@@ -10,4 +10,7 @@ export class Song {
 
   @Field()
   thumbnail!: string;
+
+  @Field(() => Int)
+  duration!: number;
 }

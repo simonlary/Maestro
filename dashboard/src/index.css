@@ -9,8 +9,18 @@ body,
   overflow: hidden;
   width: 100%;
   height: 100%;
-  @apply bg-gray-2;
+  @apply bg-gray-1;
   @apply text-white;
+}
+
+h1 {
+  @apply text-2xl;
+  @apply font-bold;
+}
+
+h2 {
+  @apply text-lg;
+  @apply font-semibold;
 }
 
 ::-webkit-scrollbar {
@@ -30,7 +40,7 @@ body,
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-2;
+  @apply bg-gray-1;
 }
 
 ::-webkit-scrollbar-corner {

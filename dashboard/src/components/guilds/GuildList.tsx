@@ -1,25 +1,33 @@
 import { NavLink } from "react-router-dom";
+import { Button } from "../controls/Button";
 
-function GuildEntry({ name, guildId }: { name: string, guildId: string }) {
+interface GuildInfo {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+function GuildEntry({ guild }: { guild: GuildInfo }) {
   return (
-    <NavLink to={guildId} className={({ isActive }) => `font-semibold rounded-sm p-2 ${isActive ? "bg-selected" : "hover:bg-hover"}`}>
-      <div>{name}</div>
+    <NavLink to={guild.id} className={({ isActive }) => `flex items-center justify-center md:justify-start rounded-sm h-16 p-2 ${isActive ? "bg-selected" : "hover:bg-hover"}`}>
+      <div className="rounded-full h-full overflow-hidden">
+        <img src={guild.icon} alt="Guild icon" className="h-full object-cover" />
+      </div>
+      <div className="flex-1 font-semibold truncate pl-2 hidden md:block">{guild.name}</div>
     </NavLink>
   );
 }
 
-export function GuildList() {
+export function GuildList({ guilds }: { guilds: GuildInfo[] }) {
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col p-4 flex-1 overflow-auto">
-        <GuildEntry name="Guild 1" guildId="1" />
-        <GuildEntry name="Guild 2" guildId="2" />
-        <GuildEntry name="Guild 3" guildId="3" />
-        <GuildEntry name="Guild 4" guildId="4" />
-        <GuildEntry name="Guild 5" guildId="5" />
+      <div className="flex flex-col pt-4 px-2 flex-1 overflow-auto gap-1">
+        {guilds.map((guild) => (
+          <GuildEntry key={guild.id} guild={guild} />
+        ))}
       </div>
-      <div className="p-4 text-center">
-        <button className="bg-gray-3 hover:bg-gray-4 p-2 rounded">Add Guild</button>
+      <div className="p-4 text-center bg-gray-1">
+        <Button text="Add" size="md" variant="normal" className="w-20 md:w-36" />
       </div>
     </div>
   );

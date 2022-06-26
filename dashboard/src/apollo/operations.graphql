@@ -3,15 +3,23 @@ query guilds {
     id
     name
     icon
+  }
+}
+
+query guild($guildId: String!) {
+  guild(guildId: $guildId) {
+    id
     currentlyPlaying {
       title
       url
       thumbnail
+      duration
     }
     queue {
       title
       url
       thumbnail
+      duration
     }
   }
 }
