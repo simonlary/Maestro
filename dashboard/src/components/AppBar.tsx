@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 
 export function AppBar() {
-  const getNavClass = ({ isActive }: { isActive: boolean }) => `flex items-center p-2 h-full hover:bg-gray-2 font-bold ${isActive ? " border-b " : "text-soft-white"}`;
+  const getNavClass = ({ isActive }: { isActive: boolean }) =>
+    `flex items-center p-2 h-full hover:bg-gray-2 font-bold ${isActive ? " border-b " : "text-soft-white"}`;
 
   return (
     <nav className="bg-gray-1 text-white">

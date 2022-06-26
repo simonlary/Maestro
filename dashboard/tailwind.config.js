@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       boxShadow: {
-        'top': '0 -10px 15px 0 rgb(0 0 0 / 0.2)',
-        'bottom': '0 10px 15px 0 rgb(0 0 0 / 0.1)',
-        'inner-bottom': 'inset  0 -10px 15px 0 rgb(0 0 0 / 0.1)',
+        top: "0 -10px 15px 0 rgb(0 0 0 / 0.2)",
+        bottom: "0 10px 15px 0 rgb(0 0 0 / 0.1)",
+        "inner-bottom": "inset  0 -10px 15px 0 rgb(0 0 0 / 0.1)",
       },
     },
     colors: {

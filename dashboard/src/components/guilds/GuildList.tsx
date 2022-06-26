@@ -9,7 +9,14 @@ interface GuildInfo {
 
 function GuildEntry({ guild }: { guild: GuildInfo }) {
   return (
-    <NavLink to={guild.id} className={({ isActive }) => `flex items-center justify-center md:justify-start rounded-sm h-16 p-2 ${isActive ? "bg-selected" : "hover:bg-hover"}`}>
+    <NavLink
+      to={guild.id}
+      className={({ isActive }) =>
+        `flex items-center justify-center md:justify-start rounded-sm h-16 p-2 ${
+          isActive ? "bg-selected" : "hover:bg-hover"
+        }`
+      }
+    >
       <div className="rounded-full h-full overflow-hidden">
         <img src={guild.icon} alt="Guild icon" className="h-full object-cover" />
       </div>

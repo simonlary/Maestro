@@ -15,7 +15,13 @@ export function Button({ text, size = "md", variant = "normal", className }: But
   const warningVariant = "bg-warning bg-opacity-80 hover:bg-opacity-100 disabled:bg-opacity-50";
   const destructiveVariant = "bg-red hover:bg-red-hover disabled:bg-opacity-50";
   const variantStyle =
-    variant === "normal" ? normalVariant : variant === "destructive" ? destructiveVariant : variant === "warning" ? warningVariant : defaultVariant;
+    variant === "normal"
+      ? normalVariant
+      : variant === "destructive"
+      ? destructiveVariant
+      : variant === "warning"
+      ? warningVariant
+      : defaultVariant;
 
   const small = "px-2 py-1 text-xs font-semibold";
   const medium = "px-3 py-2 text-md font-semibold";
