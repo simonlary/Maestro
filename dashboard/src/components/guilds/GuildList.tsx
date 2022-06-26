@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { Button } from "../controls/Button";
 
 interface GuildInfo {
   id: string;
@@ -12,7 +11,7 @@ function GuildEntry({ guild }: { guild: GuildInfo }) {
     <NavLink
       to={guild.id}
       className={({ isActive }) =>
-        `flex items-center justify-center md:justify-start rounded-sm h-16 p-2 ${
+        `flex items-center justify-center lg:justify-start rounded-sm h-16 p-2 ${
           isActive ? "bg-selected" : "hover:bg-hover"
         }`
       }
@@ -20,7 +19,7 @@ function GuildEntry({ guild }: { guild: GuildInfo }) {
       <div className="rounded-full h-full overflow-hidden">
         <img src={guild.icon} alt="Guild icon" className="h-full object-cover" />
       </div>
-      <div className="flex-1 font-semibold truncate pl-2 hidden md:block">{guild.name}</div>
+      <div className="flex-1 font-semibold truncate pl-2 hidden lg:block">{guild.name}</div>
     </NavLink>
   );
 }
@@ -33,9 +32,9 @@ export function GuildList({ guilds }: { guilds: GuildInfo[] }) {
           <GuildEntry key={guild.id} guild={guild} />
         ))}
       </div>
-      <div className="p-4 text-center bg-gray-1">
-        <Button text="Add" size="md" variant="normal" className="w-20 md:w-36" />
-      </div>
+      {/* <div className="p-4 text-center bg-gray-1">
+        <Button text="Add" size="md" variant="normal" className="w-20 lg:w-36" />
+      </div> */}
     </div>
   );
 }

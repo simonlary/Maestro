@@ -5,9 +5,10 @@ interface ButtonParams {
   size?: "sm" | "md" | "lg";
   variant?: "normal" | "destructive" | "warning" | "success";
   className?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export function Button({ text, size = "md", variant = "normal", className }: ButtonParams) {
+export function Button({ text, size = "md", variant = "normal", className, onClick = () => null }: ButtonParams) {
   const base = "rounded-md text-white disabled:opacity-30 hover:shadow-xl";
 
   const normalVariant = "bg-blue hover:bg-blue-hover disabled:bg-opacity-50";
@@ -28,5 +29,5 @@ export function Button({ text, size = "md", variant = "normal", className }: But
   const large = "px-4 py-3 text-lg font-semibold";
   const sizeStyle = size === "sm" ? small : size === "lg" ? large : medium;
 
-  return <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`}>{text}</button>;
+  return <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick}>{text}</button>;
 }

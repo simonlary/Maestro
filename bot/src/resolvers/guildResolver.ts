@@ -2,7 +2,7 @@ import { Arg, Query, Resolver } from "type-graphql";
 import { Bot } from "../bot.js";
 import { Guild } from "../schema/guild.js";
 
-export function createResolver(bot: Bot) {
+export function createGuildResolver(bot: Bot) {
   @Resolver(Guild)
   class GuildResolver {
     @Query(() => [Guild])

@@ -4,6 +4,7 @@ import { Search } from "./search/Search";
 import { useGuildLazyQuery } from "../../../apollo/generated";
 import { useEffect } from "react";
 import { NoGuildPage } from "./NoGuildPage";
+import { Player } from "./playback/Player";
 
 export function GuildPage() {
   const { guildId } = useParams();
@@ -30,14 +31,19 @@ export function GuildPage() {
   ) : (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex h-full gap-1 overflow-hidden rounded-tl-md">
-        <div className="flex-1 ">
+        <div className="flex-1">
           <Queue queue={data?.guild.queue ?? []} />
         </div>
         <div className="flex-1">
           <Search />
         </div>
       </div>
-      <div className="h-16 bg-gray-2 border-t-2 border-gray-text">Player</div>
+
+      <div className="bg-gray-text h-0.5" />
+
+      <div className="h-20 bg-gray-2">
+        <Player song={data?.guild.currentlyPlaying} />
+      </div>
     </div>
   );
 }

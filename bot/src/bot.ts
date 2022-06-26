@@ -12,6 +12,7 @@ import {
 import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
+import { logger } from "./logger.js";
 
 interface GuildInfo {
   id: Snowflake;
@@ -38,27 +39,24 @@ export class Bot {
   private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
 
   public static async create(config: Config) {
-    console.log("Creating client...");
+    logger.info("Creating client...");
     const client = new Client({
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
     });
 
-    console.log("Creating bot...");
+    logger.info("Creating bot...");
     const bot = new Bot(config, client);
 
-    console.log("Logging in...");
+    logger.info("Logging in...");
     await client.login(config.token);
 
-    console.log("Registering commands...");
-    await registerCommands(client, config);
-
-    console.log("Bot started!");
+    logger.info("Bot started!");
     return bot;
   }
 
   private constructor(private readonly config: Config, private readonly client: Client) {
     this.client.on("disconnect", () => {
-      console.log("Disconnected");
+      logger.info("Bot disconnected");
     });
     this.client.on("interactionCreate", this.onInteractionCreate);
   }
@@ -67,18 +65,23 @@ export class Bot {
     return this.activeGuilds;
   }
 
+  public async registerCommands() {
+    logger.info("Registering commands...");
+    await registerCommands(this.client, this.config);
+  }
+
   public shutdown() {
-    console.log("Shutting down...");
+    logger.info("Shutting down...");
     this.client.destroy();
   }
 
   private onInteractionCreate = async (interaction: Interaction) => {
     if (!interaction.isCommand()) {
-      console.warn(`Received an interaction that is not a command : ${interaction.type}`);
+      logger.warn(`Received an interaction that is not a command : ${interaction.type}`);
       return;
     }
 
-    console.log(
+    logger.info(
       `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
     );
 
@@ -103,11 +106,17 @@ export class Bot {
           await this.queue(interaction);
           break;
         default:
-          console.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
+          logger.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
           break;
       }
     } catch (e) {
-      console.error(e);
+      if (typeof e === "string") {
+        logger.error(e);
+      } else if (e instanceof Error) {
+        logger.error(e.message);
+      } else {
+        logger.error(`Received unknown error : ${e}`);
+      }
       if (interaction.replied) {
         await interaction.followUp({ content: "Sorry, there was an error executing you command.", ephemeral: true });
       } else {
@@ -125,9 +134,7 @@ export class Bot {
 
     const member = interaction.guild.members.cache.get(interaction.user.id);
     if (member == null) {
-      console.error(`"member" is null for user "${interaction.user.tag} (${interaction.user.id})".`);
-      await interaction.reply({ content: "Sorry, there was an error executing you command.", ephemeral: true });
-      return;
+      throw new Error(`"member" is null for user "${interaction.user.tag} (${interaction.user.id})".`);
     }
 
     if (member.voice.channel == null) {
@@ -156,9 +163,7 @@ export class Bot {
         return;
       }
     } else {
-      console.error(`Invalid subcommand "${subcommand}".`);
-      await interaction.editReply({ content: "Sorry, there was an error executing you command." });
-      return;
+      throw new Error(`Invalid subcommand "${subcommand}".`);
     }
 
     const songInfo = await playdl.video_info(url);
@@ -209,7 +214,7 @@ export class Bot {
     activeGuild.voiceConnection.subscribe(activeGuild.audioPlayer);
 
     activeGuild.audioPlayer.once(AudioPlayerStatus.Idle, () => this.playNext(activeGuild));
-    activeGuild.audioPlayer.on("error", console.error);
+    activeGuild.audioPlayer.on("error", (e) => logger.error(e.message));
   };
 
   private stop = async (interaction: CommandInteraction) => {

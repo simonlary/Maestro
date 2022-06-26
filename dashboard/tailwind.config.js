@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
@@ -22,6 +23,7 @@ module.exports = {
       "gray-4": "#40444b",
       "gray-5": "#42464d",
       "gray-text": "#8c9095",
+      yellow: "#f0a119",
       red: "#d83c3e",
       "red-hover": "#a12d2f",
       icon: "#b9bbbe",
@@ -30,5 +32,5 @@ module.exports = {
       selected: "#34373d",
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

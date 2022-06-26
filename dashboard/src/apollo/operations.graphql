@@ -23,3 +23,16 @@ query guild($guildId: String!) {
     }
   }
 }
+
+query logs($limit: Int) {
+  logs(limit: $limit) {
+    id
+    timestamp
+    level
+    message
+  }
+}
+
+mutation registerCommands {
+  registerCommands
+}

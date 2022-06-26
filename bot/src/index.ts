@@ -5,30 +5,33 @@ import { Config } from "./config.js";
 import * as path from "path";
 import { fileURLToPath } from "url";
 import { ApolloServer } from "apollo-server";
-import { createResolver } from "./resolvers/guildResolver.js";
+import { createGuildResolver } from "./resolvers/guildResolver.js";
+import { createSettingsResolver } from "./resolvers/settingsResolver.js";
+import { createLogResolver } from "./resolvers/logResolver.js";
+import { logger } from "./logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-console.log("Loading config...");
+logger.info("Loading config...");
 const config = new Config();
 
-console.log("Instanciating bot...");
+logger.info("Instanciating bot...");
 const bot = await Bot.create(config);
 
-console.log("Building API schema...");
+logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [createResolver(bot)],
+  resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver()],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
 });
 
-console.log("Creating Apollo server...");
+logger.info("Creating Apollo server...");
 const server = new ApolloServer({
   schema,
 });
 
-console.log("Starting Apollo server...");
+logger.info("Starting Apollo server...");
 const { url } = await server.listen({ port: config.apolloServerPort });
-console.log(`Listening on: ${url}`);
+logger.info(`Listening on: ${url}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();
