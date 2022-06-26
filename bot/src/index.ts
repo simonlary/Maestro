@@ -1,25 +1,39 @@
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
 import { Bot } from "./bot.js";
 import { Config } from "./config.js";
+import * as path from "path";
+import { fileURLToPath } from "url";
+import { ApolloServer } from "apollo-server";
+import { createResolver } from "./resolvers/guildResolver.js";
 
-let bot: Bot;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-try {
-    console.log("Loading config...");
-    const config = new Config();
+console.log("Loading config...");
+const config = new Config();
 
-    console.log("Instanciating bot...");
-    // We need to keep this reference so the bot doesn't get garbage collected.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    bot = await Bot.create(config);
-} catch (error) {
-    console.error(`An error occured while starting the bot : ${error}`);
-    process.exit();
-}
+console.log("Instanciating bot...");
+const bot = await Bot.create(config);
+
+console.log("Building API schema...");
+const schema = await buildSchema({
+  resolvers: [createResolver(bot)],
+  emitSchemaFile: path.resolve(__dirname, "schema.gql"),
+});
+
+console.log("Creating Apollo server...");
+const server = new ApolloServer({
+  schema,
+});
+
+console.log("Starting Apollo server...");
+const { url } = await server.listen({ port: config.apolloServerPort });
+console.log(`Listening on: ${url}`);
 
 process.addListener("SIGINT", () => {
-    bot.shutdown();
+  bot.shutdown();
 });
 
 process.addListener("SIGTERM", () => {
-    bot.shutdown();
+  bot.shutdown();
 });

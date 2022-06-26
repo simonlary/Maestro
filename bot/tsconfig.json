@@ -6,7 +6,9 @@
 		"outDir": "out",
 		"strict": true,
 		"esModuleInterop": true,
-		"baseUrl": ".",
+		"emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+		"skipLibCheck": true,
 	},
 	"include": [
 		"src/**/*"

@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, Intents, Interaction, MessageEmbed } from "discord.js";
+import { Client, CommandInteraction, Intents, Interaction, MessageEmbed, Snowflake } from "discord.js";
 import { AudioPlayer, AudioPlayerStatus, createAudioPlayer, createAudioResource, entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus } from "@discordjs/voice";
 import playdl from "play-dl";
 import { Config } from "./config.js";
@@ -10,7 +10,7 @@ interface Song {
 }
 
 interface ActiveGuild {
-    guildId: string;
+    guildId: Snowflake;
     voiceConnection: VoiceConnection;
     audioPlayer?: AudioPlayer;
     queue: Song[];
@@ -19,7 +19,7 @@ interface ActiveGuild {
 
 export class Bot {
 
-    private readonly activeGuilds = new Map<string, ActiveGuild>();
+    private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
 
     public static async create(config: Config) {
         console.log("Creating client...");
@@ -46,6 +46,21 @@ export class Bot {
     ) {
         this.client.on("disconnect", () => { console.log("Disconnected"); });
         this.client.on("interactionCreate", this.onInteractionCreate);
+    }
+
+    public getGuildInfos(guildId: Snowflake) {
+        const guild = this.client.guilds.cache.get(guildId);
+        if (guild == null) {
+            throw new Error(`Guild with id ${guildId} not found!`);
+        }
+        return {
+            name: guild.name,
+            icon: guild.iconURL(),
+        };
+    }
+
+    public getActiveGuilds() {
+        return this.activeGuilds;
     }
 
     public shutdown() {
