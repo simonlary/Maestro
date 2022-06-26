@@ -7,7 +7,7 @@ export function Guilds() {
 
   return (
     <div className="h-full flex">
-      <div className="w-28 md:w-48 xl:w-72 bg-gray-1">{!loading && <GuildList guilds={data!.guilds} />}</div>
+      <div className="w-28 md:w-48 xl:w-72 bg-gray-1">{!loading && <GuildList guilds={data?.guilds ?? []} />}</div>
       <div className="flex-1 bg-gray-1">
         <Outlet />
       </div>

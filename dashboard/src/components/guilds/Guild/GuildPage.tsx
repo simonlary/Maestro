@@ -31,7 +31,7 @@ export function GuildPage() {
     <div className="h-full flex flex-col">
       <div className="flex-1 flex h-full gap-1 overflow-hidden rounded-tl-md">
         <div className="flex-1 ">
-          <Queue queue={data!.guild.queue} />
+          <Queue queue={data?.guild.queue ?? []} />
         </div>
         <div className="flex-1">
           <Search />
