@@ -38,6 +38,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   pause: Scalars['Boolean'];
   registerCommands: Scalars['Boolean'];
+  restart: Scalars['Boolean'];
   resume: Scalars['Boolean'];
   skip: Scalars['Boolean'];
 };
@@ -67,6 +68,7 @@ export type Query = {
   guild: Guild;
   guilds: Array<Guild>;
   logs: Array<Log>;
+  settings: Settings;
 };
 
 
@@ -77,6 +79,11 @@ export type QueryGuildArgs = {
 
 export type QueryLogsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
+};
+
+export type Settings = {
+  __typename?: 'Settings';
+  hasAlreadyRegisteredCommands: Scalars['Boolean'];
 };
 
 export type Song = {
@@ -116,10 +123,20 @@ export type LogsQueryVariables = Exact<{
 
 export type LogsQuery = { __typename?: 'Query', logs: Array<{ __typename?: 'Log', id: number, timestamp: string, level: "info" | "warning" | "error", message: string }> };
 
+export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SettingsQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', hasAlreadyRegisteredCommands: boolean } };
+
 export type RegisterCommandsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type RegisterCommandsMutation = { __typename?: 'Mutation', registerCommands: boolean };
+
+export type RestartMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RestartMutation = { __typename?: 'Mutation', restart: boolean };
 
 export type ResumeMutationVariables = Exact<{
   guildId: Scalars['String'];
@@ -274,6 +291,40 @@ export function useLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogsQ
 export type LogsQueryHookResult = ReturnType<typeof useLogsQuery>;
 export type LogsLazyQueryHookResult = ReturnType<typeof useLogsLazyQuery>;
 export type LogsQueryResult = Apollo.QueryResult<LogsQuery, LogsQueryVariables>;
+export const SettingsDocument = gql`
+    query settings {
+  settings {
+    hasAlreadyRegisteredCommands
+  }
+}
+    `;
+
+/**
+ * __useSettingsQuery__
+ *
+ * To run a query within a React component, call `useSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSettingsQuery(baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+      }
+export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+        }
+export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
+export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
+export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
 export const RegisterCommandsDocument = gql`
     mutation registerCommands {
   registerCommands
@@ -304,6 +355,36 @@ export function useRegisterCommandsMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterCommandsMutationHookResult = ReturnType<typeof useRegisterCommandsMutation>;
 export type RegisterCommandsMutationResult = Apollo.MutationResult<RegisterCommandsMutation>;
 export type RegisterCommandsMutationOptions = Apollo.BaseMutationOptions<RegisterCommandsMutation, RegisterCommandsMutationVariables>;
+export const RestartDocument = gql`
+    mutation restart {
+  restart
+}
+    `;
+export type RestartMutationFn = Apollo.MutationFunction<RestartMutation, RestartMutationVariables>;
+
+/**
+ * __useRestartMutation__
+ *
+ * To run a mutation, you first call `useRestartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRestartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [restartMutation, { data, loading, error }] = useRestartMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRestartMutation(baseOptions?: Apollo.MutationHookOptions<RestartMutation, RestartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RestartMutation, RestartMutationVariables>(RestartDocument, options);
+      }
+export type RestartMutationHookResult = ReturnType<typeof useRestartMutation>;
+export type RestartMutationResult = Apollo.MutationResult<RestartMutation>;
+export type RestartMutationOptions = Apollo.BaseMutationOptions<RestartMutation, RestartMutationVariables>;
 export const ResumeDocument = gql`
     mutation resume($guildId: String!) {
   resume(guildId: $guildId)

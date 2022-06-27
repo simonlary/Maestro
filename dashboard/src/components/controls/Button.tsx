@@ -6,9 +6,17 @@ interface ButtonParams {
   variant?: "normal" | "destructive" | "warning" | "success";
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
 }
 
-export function Button({ text, size = "md", variant = "normal", className, onClick = () => null }: ButtonParams) {
+export function Button({
+  text,
+  size = "md",
+  variant = "normal",
+  className,
+  onClick = () => null,
+  disabled = false,
+}: ButtonParams) {
   const base = "rounded-md text-white disabled:opacity-30 hover:shadow-xl";
 
   const normalVariant = "bg-blue hover:bg-blue-hover disabled:bg-opacity-50";
@@ -30,7 +38,7 @@ export function Button({ text, size = "md", variant = "normal", className, onCli
   const sizeStyle = size === "sm" ? small : size === "lg" ? large : medium;
 
   return (
-    <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick}>
+    <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick} disabled={disabled}>
       {text}
     </button>
   );

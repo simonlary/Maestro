@@ -1,4 +1,7 @@
-import { ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-export class Settings { }
+export class Settings {
+  @Field()
+  hasAlreadyRegisteredCommands!: boolean;
+}

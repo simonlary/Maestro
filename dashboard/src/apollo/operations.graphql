@@ -36,8 +36,18 @@ query logs($limit: Int) {
   }
 }
 
+query settings {
+  settings {
+    hasAlreadyRegisteredCommands
+  }
+}
+
 mutation registerCommands {
   registerCommands
+}
+
+mutation restart {
+  restart
 }
 
 mutation resume($guildId: String!) {

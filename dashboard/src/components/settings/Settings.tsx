@@ -1,14 +1,22 @@
-import { useRegisterCommandsMutation } from "../../apollo/generated";
+import { useRegisterCommandsMutation, useRestartMutation, useSettingsQuery } from "../../apollo/generated";
 import { Button } from "../controls/Button";
 import { SettingsCard } from "./SettingsCard";
 
 export function Settings() {
+  const { data, refetch } = useSettingsQuery();
   const [registerCommands] = useRegisterCommandsMutation();
+  const [restartCommand] = useRestartMutation();
 
-  async function onClick() {
-    await registerCommands();
-    alert("Done!");
+  async function onRegisterCommandsClick() {
+    const result = await registerCommands();
+    if (result.errors || result.data == null || !result.data.registerCommands) {
+      alert("Registering commands failed!");
+    }
+
+    refetch();
   }
+
+  const disableRegisterButton = data?.settings.hasAlreadyRegisteredCommands ?? true;
 
   return (
     <div className="pt-2 flex justify-center">
@@ -17,14 +25,26 @@ export function Settings() {
           <div className="flex flex-col gap-2">
             <h1>Register commands</h1>
             <div>This buttons registers the bot&apos;s commands. This is rate-limited by discord.</div>
-            <Button text="Register" size="md" className="w-36 mt-2" onClick={onClick} />
+            <Button
+              text={disableRegisterButton ? "Already registered" : "Register"}
+              size="md"
+              className="w-44 mt-2"
+              onClick={onRegisterCommandsClick}
+              disabled={disableRegisterButton}
+            />
           </div>
         </SettingsCard>
         <SettingsCard>
           <div className="flex flex-col gap-2">
             <h1>Restart bot</h1>
             <div>This button will restart the bot. Any media being played will stop.</div>
-            <Button text="Restart" size="md" variant="destructive" className="w-36 mt-2" />
+            <Button
+              text="Restart"
+              size="md"
+              variant="destructive"
+              className="w-44 mt-2"
+              onClick={() => restartCommand()}
+            />
           </div>
         </SettingsCard>
       </div>
