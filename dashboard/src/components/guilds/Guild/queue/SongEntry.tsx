@@ -1,4 +1,4 @@
-import { RiBarChartFill } from "react-icons/ri";
+import { RiBarChartFill, RiYoutubeFill } from "react-icons/ri";
 import { Song } from "../../../../apollo/generated";
 
 function formatDuration(duration: number) {
@@ -27,7 +27,11 @@ type SongEntryProps = OtherSongsProps | FirstSongsProps;
 
 export function SongEntry(props: SongEntryProps) {
   return (
-    <div className={`flex justify-between items-center py-2 hover:bg-gray-2 ${props.isPlaying && "text-green"}`}>
+    <div
+      className={`flex justify-between items-center py-2 hover:bg-gray-2 select-none ${
+        props.isPlaying && "text-green"
+      }`}
+    >
       <span className="w-11 px-2 text-right font-mono">
         {props.isPlaying ? <RiBarChartFill className="inline" /> : props.index}
       </span>
@@ -37,6 +41,9 @@ export function SongEntry(props: SongEntryProps) {
         </div>
         <span className="flex-1 line-clamp-2 font-semibold">{props.song.title}</span>
       </div>
+      <a className="flex items-center text-red" href={props.song.url} target="_blank" rel="noopener noreferrer">
+        <RiYoutubeFill className="cursor-pointer" />
+      </a>
       <span className="px-3 font-mono text-right">{formatDuration(props.song.duration)}</span>
     </div>
   );

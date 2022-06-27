@@ -21,7 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 logger.info("Loading config...");
 const config = new Config();
 
-logger.info("Creating PubSub...")
+logger.info("Creating PubSub...");
 const pubSub = new PubSub();
 
 logger.info("Instanciating bot...");
