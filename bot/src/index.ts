@@ -11,7 +11,9 @@ import { logger } from "./logger.js";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
-import http from "http";
+import { createServer } from "http";
+import { WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -27,21 +29,42 @@ const schema = await buildSchema({
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
 });
 
-logger.info("Creating Express server...");
+logger.info("Creating HTTP server...");
 const app = express();
-const httpServer = http.createServer(app);
+const httpServer = createServer(app);
+
+logger.info("Creating WebSocket server...");
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/",
+});
+const serverCleanup = useServer({ schema }, wsServer);
 
 logger.info("Creating Apollo server...");
 const server = new ApolloServer({
   schema,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  plugins: [
+    // Shutdown the HTTP server
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+
+    // Shutdown the WS server
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    },
+  ],
 });
 
 logger.info("Starting Apollo server...");
 await server.start();
 server.applyMiddleware({ app, path: "/" });
 await new Promise<void>((resolve) => httpServer.listen({ port: config.apolloServerPort }, resolve));
-logger.info(`Listening on: http://localhost:/${config.apolloServerPort}`);
+logger.info(`Listening on: http://localhost:${config.apolloServerPort}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();

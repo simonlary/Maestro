@@ -1,5 +1,5 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { Arg, Query, Resolver } from "type-graphql";
+import { Arg, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription } from "type-graphql";
 import { Bot } from "../bot.js";
 import { Guild } from "../schema/guild.js";
 
@@ -15,7 +15,7 @@ export function createGuildResolver(bot: Bot) {
           icon: activeGuild.guildInfo.icon,
           currentlyPlaying: activeGuild.currentlyPlaying,
           playbackStatus: {
-            isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing
+            isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
           },
           queue: activeGuild.queue,
         };
@@ -34,10 +34,21 @@ export function createGuildResolver(bot: Bot) {
         icon: guild.guildInfo.icon,
         currentlyPlaying: guild.currentlyPlaying,
         playbackStatus: {
-          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing
+          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
         },
         queue: guild.queue,
       };
+    }
+
+    @Mutation(() => Boolean)
+    async testMutation(@Arg("message") message: string, @PubSub() pubSub: PubSubEngine) {
+      await pubSub.publish("TEST", message);
+      return false;
+    }
+
+    @Subscription(() => String, { topics: "TEST" })
+    async guildUpdated(@Root() message: string) {
+      return message;
     }
   }
 
