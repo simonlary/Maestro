@@ -10,6 +10,7 @@ query guild($guildId: String!) {
   guild(guildId: $guildId) {
     id
     currentlyPlaying {
+      id
       title
       url
       thumbnail
@@ -19,6 +20,7 @@ query guild($guildId: String!) {
       isPlaying
     }
     queue {
+      id
       title
       url
       thumbnail
@@ -62,10 +64,15 @@ mutation skip($guildId: String!) {
   skip(guildId: $guildId)
 }
 
+mutation removeQueuedSong($guildId: String!, $songId: Int!) {
+  removeQueuedSong(guildId: $guildId, songId: $songId)
+}
+
 subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {
     id
     currentlyPlaying {
+      id
       title
       url
       thumbnail
@@ -75,6 +82,7 @@ subscription guildUpdated($guildId: String!) {
       isPlaying
     }
     queue {
+      id
       title
       url
       thumbnail

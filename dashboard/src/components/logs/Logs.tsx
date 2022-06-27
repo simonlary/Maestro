@@ -15,7 +15,7 @@ export function Logs() {
   return (
     <div className="h-full flex justify-center p-4 ">
       <div className="h-full w-full lg:w-11/12 2xl:w-2/3 bg-code rounded-md shadow-md" ref={scrollableView}>
-        <div className="py-2 h-full flex flex-col-reverse overflow-auto">
+        <div className="py-2 max-h-full flex flex-col-reverse overflow-auto">
           {logs.length === 0
             ? "No Content"
             : logs.map((l) => {

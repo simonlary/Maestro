@@ -39,13 +39,13 @@ export function GuildPage() {
     });
   }, [called]);
 
-  return loading || !called || error ? (
+  return loading || !called || error || data == null || guildId == null ? (
     <NoGuildPage />
   ) : (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex h-full gap-1 overflow-hidden rounded-tl-md">
         <div className="flex-1">
-          <Queue currentSong={data?.guild.currentlyPlaying} queue={data?.guild.queue ?? []} />
+          <Queue currentSong={data.guild.currentlyPlaying} queue={data.guild.queue} guildId={guildId} />
         </div>
         <div className="flex-1">
           <Search />
@@ -55,11 +55,7 @@ export function GuildPage() {
       <div className="bg-gray-text h-0.5" />
 
       <div className="h-20 bg-gray-2">
-        <Player
-          song={data?.guild.currentlyPlaying}
-          playbackStatus={data?.guild.playbackStatus}
-          guildId={guildId ?? ""}
-        />
+        <Player song={data.guild.currentlyPlaying} playbackStatus={data.guild.playbackStatus} guildId={guildId ?? ""} />
       </div>
     </div>
   );

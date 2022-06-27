@@ -1,7 +1,18 @@
-import { Song } from "../../../../apollo/generated";
+import { Song, useRemoveQueuedSongMutation } from "../../../../apollo/generated";
 import { SongEntry } from "./SongEntry";
 
-export function Queue({ currentSong, queue }: { currentSong?: Song; queue: Song[] }) {
+export function Queue({ currentSong, queue, guildId }: { currentSong: Song; queue: Song[]; guildId: string }) {
+  const [removeQueuedSong] = useRemoveQueuedSongMutation();
+
+  function removeSong(song: Song) {
+    removeQueuedSong({
+      variables: {
+        guildId,
+        songId: song.id,
+      },
+    });
+  }
+
   return (
     <div className="bg-gray-3 rounded-tr-md h-full">
       <div className="flex flex-col h-full">
@@ -13,10 +24,10 @@ export function Queue({ currentSong, queue }: { currentSong?: Song; queue: Song[
 
         <div className="relative h-full shadow-inner-bottom">
           <div className="overflow-auto absolute inset-0">
-            {currentSong && <SongEntry song={currentSong} isPlaying />}
+            {currentSong && <SongEntry song={currentSong} onRemove={() => removeSong(currentSong)} isPlaying />}
 
             {queue.map((s, i) => (
-              <SongEntry key={s.url} song={s} index={i + 1} />
+              <SongEntry key={s.id} song={s} onRemove={() => removeSong(s)} index={i + 1} />
             ))}
           </div>
         </div>

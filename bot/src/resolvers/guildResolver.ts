@@ -1,5 +1,6 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { Arg, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
+import { Snowflake } from "discord.js";
+import { Arg, Int, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription } from "type-graphql";
 import { ActiveGuild, Bot } from "../bot.js";
 import { logger } from "../logger.js";
 import { Guild } from "../schema/guild.js";
@@ -24,7 +25,7 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Query(() => Guild)
-    async guild(@Arg("guildId") guildId: string) {
+    async guild(@Arg("guildId") guildId: Snowflake) {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -42,7 +43,7 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Mutation(() => Boolean)
-    async resume(@Arg("guildId") guildId: string) {
+    async resume(@Arg("guildId") guildId: Snowflake) {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -56,7 +57,7 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Mutation(() => Boolean)
-    async pause(@Arg("guildId") guildId: string) {
+    async pause(@Arg("guildId") guildId: Snowflake) {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -70,7 +71,7 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Mutation(() => Boolean)
-    async skip(@Arg("guildId") guildId: string) {
+    async skip(@Arg("guildId") guildId: Snowflake) {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -83,12 +84,18 @@ export function createGuildResolver(bot: Bot) {
       return guild.audioPlayer.stop();
     }
 
+    @Mutation(() => Int)
+    async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId", () => Int) songId: number) {
+      const song = bot.removeSongFromQueue(guildId, songId);
+      return song.id;
+    }
+
     @Subscription(() => Guild, {
       topics: "GUILD_UPDATED",
       filter: ({ payload, args }) => payload.guildInfo.id === args.guildId,
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: string) {
+    async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: Snowflake) {
       return {
         id: guild.guildInfo.id,
         name: guild.guildInfo.name,

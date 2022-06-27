@@ -63,6 +63,10 @@ const server = new ApolloServer({
       },
     },
   ],
+  formatError: (e) => {
+    logger.error(`GraphQL Error : ${e.message}`);
+    return e;
+  },
 });
 
 logger.info("Starting Apollo server...");
