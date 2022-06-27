@@ -1,6 +1,6 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
-import { Arg, Int, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription } from "type-graphql";
+import { Arg, Int, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
 import { ActiveGuild, Bot } from "../bot.js";
 import { logger } from "../logger.js";
 import { Guild } from "../schema/guild.js";
