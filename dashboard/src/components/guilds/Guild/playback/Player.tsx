@@ -1,20 +1,24 @@
 import { RiPauseFill, RiPlayFill, RiSkipBackFill, RiSkipForwardFill } from "react-icons/ri";
-import { PlaybackStatus, Song } from "../../../../apollo/generated";
+import {
+  PlaybackStatus,
+  Song,
+  usePauseMutation,
+  useResumeMutation,
+  useSkipMutation,
+} from "../../../../apollo/generated";
 
-export function Player({ song, playbackStatus }: { song?: Song; playbackStatus?: PlaybackStatus }) {
+interface PlayerProps {
+  song?: Song;
+  playbackStatus?: PlaybackStatus;
+  guildId: string;
+}
+
+export function Player({ song, playbackStatus, guildId }: PlayerProps) {
   const isPlaying = playbackStatus?.isPlaying || false;
 
-  function resume() {
-    return;
-  }
-
-  function pause() {
-    return;
-  }
-
-  function skip() {
-    return;
-  }
+  const [resume] = useResumeMutation({ variables: { guildId } });
+  const [pause] = usePauseMutation({ variables: { guildId } });
+  const [skip] = useSkipMutation({ variables: { guildId } });
 
   return (
     <div className="flex justify-between">
@@ -27,11 +31,11 @@ export function Player({ song, playbackStatus }: { song?: Song; playbackStatus?:
       <div className="flex items-center justify-center gap-4 text-2xl flex-grow">
         <RiSkipBackFill className="invisible" />
         {isPlaying ? (
-          <RiPauseFill className="text-5xl cursor-pointer" onClick={pause} />
+          <RiPauseFill className="text-5xl cursor-pointer" onClick={() => pause()} />
         ) : (
-          <RiPlayFill className="text-5xl cursor-pointer" onClick={resume} />
+          <RiPlayFill className="text-5xl cursor-pointer" onClick={() => resume()} />
         )}
-        <RiSkipForwardFill className="cursor-pointer" onClick={skip} />
+        <RiSkipForwardFill className="cursor-pointer" onClick={() => skip()} />
       </div>
       <div className="w-96"></div>
     </div>

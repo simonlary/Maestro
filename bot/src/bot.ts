@@ -13,6 +13,7 @@ import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
 import { logger } from "./logger.js";
+import { PubSubEngine } from "graphql-subscriptions";
 
 interface GuildInfo {
   id: Snowflake;
@@ -27,7 +28,7 @@ interface Song {
   duration: number;
 }
 
-interface ActiveGuild {
+export interface ActiveGuild {
   guildInfo: GuildInfo;
   voiceConnection: VoiceConnection;
   audioPlayer?: AudioPlayer;
@@ -38,14 +39,14 @@ interface ActiveGuild {
 export class Bot {
   private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
 
-  public static async create(config: Config) {
+  public static async create(config: Config, pubSub: PubSubEngine) {
     logger.info("Creating client...");
     const client = new Client({
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
     });
 
     logger.info("Creating bot...");
-    const bot = new Bot(config, client);
+    const bot = new Bot(config, client, pubSub);
 
     logger.info("Logging in...");
     await client.login(config.token);
@@ -54,7 +55,11 @@ export class Bot {
     return bot;
   }
 
-  private constructor(private readonly config: Config, private readonly client: Client) {
+  private constructor(
+    private readonly config: Config,
+    private readonly client: Client,
+    private readonly pubSub: PubSubEngine
+  ) {
     this.client.on("disconnect", () => {
       logger.info("Bot disconnected");
     });
@@ -73,6 +78,10 @@ export class Bot {
   public shutdown() {
     logger.info("Shutting down...");
     this.client.destroy();
+  }
+
+  private guildUpdated(activeGuild: ActiveGuild) {
+    this.pubSub.publish("GUILD_UPDATED", activeGuild);
   }
 
   private onInteractionCreate = async (interaction: Interaction) => {
@@ -192,8 +201,10 @@ export class Bot {
       this.activeGuilds.set(guildId, newActiveGuild);
       await entersState(voiceConnection, VoiceConnectionStatus.Ready, 5_000);
       await this.playNext(newActiveGuild);
+      this.guildUpdated(newActiveGuild);
     } else {
       activeGuild.queue.push(song);
+      this.guildUpdated(activeGuild);
     }
 
     const embed = new MessageEmbed()
@@ -219,6 +230,7 @@ export class Bot {
     activeGuild.audioPlayer.play(audioResource);
     activeGuild.voiceConnection.subscribe(activeGuild.audioPlayer);
 
+    activeGuild.audioPlayer.on("stateChange", () => this.guildUpdated(activeGuild));
     activeGuild.audioPlayer.once(AudioPlayerStatus.Idle, () => this.playNext(activeGuild));
     activeGuild.audioPlayer.on("error", (e) => logger.error(e.message));
   };

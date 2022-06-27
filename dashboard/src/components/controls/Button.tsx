@@ -29,5 +29,9 @@ export function Button({ text, size = "md", variant = "normal", className, onCli
   const large = "px-4 py-3 text-lg font-semibold";
   const sizeStyle = size === "sm" ? small : size === "lg" ? large : medium;
 
-  return <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick}>{text}</button>;
+  return (
+    <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick}>
+      {text}
+    </button>
+  );
 }

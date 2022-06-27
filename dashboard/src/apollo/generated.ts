@@ -36,7 +36,25 @@ export type Log = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  pause: Scalars['Boolean'];
   registerCommands: Scalars['Boolean'];
+  resume: Scalars['Boolean'];
+  skip: Scalars['Boolean'];
+};
+
+
+export type MutationPauseArgs = {
+  guildId: Scalars['String'];
+};
+
+
+export type MutationResumeArgs = {
+  guildId: Scalars['String'];
+};
+
+
+export type MutationSkipArgs = {
+  guildId: Scalars['String'];
 };
 
 export type PlaybackStatus = {
@@ -69,6 +87,16 @@ export type Song = {
   url: Scalars['String'];
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  guildUpdated: Guild;
+};
+
+
+export type SubscriptionGuildUpdatedArgs = {
+  guildId: Scalars['String'];
+};
+
 export type GuildsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -92,6 +120,34 @@ export type RegisterCommandsMutationVariables = Exact<{ [key: string]: never; }>
 
 
 export type RegisterCommandsMutation = { __typename?: 'Mutation', registerCommands: boolean };
+
+export type ResumeMutationVariables = Exact<{
+  guildId: Scalars['String'];
+}>;
+
+
+export type ResumeMutation = { __typename?: 'Mutation', resume: boolean };
+
+export type PauseMutationVariables = Exact<{
+  guildId: Scalars['String'];
+}>;
+
+
+export type PauseMutation = { __typename?: 'Mutation', pause: boolean };
+
+export type SkipMutationVariables = Exact<{
+  guildId: Scalars['String'];
+}>;
+
+
+export type SkipMutation = { __typename?: 'Mutation', skip: boolean };
+
+export type GuildUpdatedSubscriptionVariables = Exact<{
+  guildId: Scalars['String'];
+}>;
+
+
+export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', title: string, url: string, thumbnail: string, duration: number }> } };
 
 
 export const GuildsDocument = gql`
@@ -248,3 +304,141 @@ export function useRegisterCommandsMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterCommandsMutationHookResult = ReturnType<typeof useRegisterCommandsMutation>;
 export type RegisterCommandsMutationResult = Apollo.MutationResult<RegisterCommandsMutation>;
 export type RegisterCommandsMutationOptions = Apollo.BaseMutationOptions<RegisterCommandsMutation, RegisterCommandsMutationVariables>;
+export const ResumeDocument = gql`
+    mutation resume($guildId: String!) {
+  resume(guildId: $guildId)
+}
+    `;
+export type ResumeMutationFn = Apollo.MutationFunction<ResumeMutation, ResumeMutationVariables>;
+
+/**
+ * __useResumeMutation__
+ *
+ * To run a mutation, you first call `useResumeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResumeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resumeMutation, { data, loading, error }] = useResumeMutation({
+ *   variables: {
+ *      guildId: // value for 'guildId'
+ *   },
+ * });
+ */
+export function useResumeMutation(baseOptions?: Apollo.MutationHookOptions<ResumeMutation, ResumeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResumeMutation, ResumeMutationVariables>(ResumeDocument, options);
+      }
+export type ResumeMutationHookResult = ReturnType<typeof useResumeMutation>;
+export type ResumeMutationResult = Apollo.MutationResult<ResumeMutation>;
+export type ResumeMutationOptions = Apollo.BaseMutationOptions<ResumeMutation, ResumeMutationVariables>;
+export const PauseDocument = gql`
+    mutation pause($guildId: String!) {
+  pause(guildId: $guildId)
+}
+    `;
+export type PauseMutationFn = Apollo.MutationFunction<PauseMutation, PauseMutationVariables>;
+
+/**
+ * __usePauseMutation__
+ *
+ * To run a mutation, you first call `usePauseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePauseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pauseMutation, { data, loading, error }] = usePauseMutation({
+ *   variables: {
+ *      guildId: // value for 'guildId'
+ *   },
+ * });
+ */
+export function usePauseMutation(baseOptions?: Apollo.MutationHookOptions<PauseMutation, PauseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PauseMutation, PauseMutationVariables>(PauseDocument, options);
+      }
+export type PauseMutationHookResult = ReturnType<typeof usePauseMutation>;
+export type PauseMutationResult = Apollo.MutationResult<PauseMutation>;
+export type PauseMutationOptions = Apollo.BaseMutationOptions<PauseMutation, PauseMutationVariables>;
+export const SkipDocument = gql`
+    mutation skip($guildId: String!) {
+  skip(guildId: $guildId)
+}
+    `;
+export type SkipMutationFn = Apollo.MutationFunction<SkipMutation, SkipMutationVariables>;
+
+/**
+ * __useSkipMutation__
+ *
+ * To run a mutation, you first call `useSkipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSkipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [skipMutation, { data, loading, error }] = useSkipMutation({
+ *   variables: {
+ *      guildId: // value for 'guildId'
+ *   },
+ * });
+ */
+export function useSkipMutation(baseOptions?: Apollo.MutationHookOptions<SkipMutation, SkipMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SkipMutation, SkipMutationVariables>(SkipDocument, options);
+      }
+export type SkipMutationHookResult = ReturnType<typeof useSkipMutation>;
+export type SkipMutationResult = Apollo.MutationResult<SkipMutation>;
+export type SkipMutationOptions = Apollo.BaseMutationOptions<SkipMutation, SkipMutationVariables>;
+export const GuildUpdatedDocument = gql`
+    subscription guildUpdated($guildId: String!) {
+  guildUpdated(guildId: $guildId) {
+    id
+    currentlyPlaying {
+      title
+      url
+      thumbnail
+      duration
+    }
+    playbackStatus {
+      isPlaying
+    }
+    queue {
+      title
+      url
+      thumbnail
+      duration
+    }
+  }
+}
+    `;
+
+/**
+ * __useGuildUpdatedSubscription__
+ *
+ * To run a query within a React component, call `useGuildUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGuildUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGuildUpdatedSubscription({
+ *   variables: {
+ *      guildId: // value for 'guildId'
+ *   },
+ * });
+ */
+export function useGuildUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>(GuildUpdatedDocument, options);
+      }
+export type GuildUpdatedSubscriptionHookResult = ReturnType<typeof useGuildUpdatedSubscription>;
+export type GuildUpdatedSubscriptionResult = Apollo.SubscriptionResult<GuildUpdatedSubscription>;

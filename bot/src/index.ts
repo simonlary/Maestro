@@ -14,19 +14,24 @@ import express from "express";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
+import { PubSub } from "graphql-subscriptions";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 logger.info("Loading config...");
 const config = new Config();
 
+logger.info("Creating PubSub...")
+const pubSub = new PubSub();
+
 logger.info("Instanciating bot...");
-const bot = await Bot.create(config);
+const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
   resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver()],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
+  pubSub,
 });
 
 logger.info("Creating HTTP server...");

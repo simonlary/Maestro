@@ -1,6 +1,7 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
-import { Arg, Mutation, PubSub, PubSubEngine, Query, Resolver, Root, Subscription } from "type-graphql";
-import { Bot } from "../bot.js";
+import { Arg, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
+import { ActiveGuild, Bot } from "../bot.js";
+import { logger } from "../logger.js";
 import { Guild } from "../schema/guild.js";
 
 export function createGuildResolver(bot: Bot) {
@@ -24,7 +25,7 @@ export function createGuildResolver(bot: Bot) {
 
     @Query(() => Guild)
     async guild(@Arg("guildId") guildId: string) {
-      const guild = [...bot.getActiveGuilds().values()].find((g) => g.guildInfo.id === guildId);
+      const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
       }
@@ -41,14 +42,63 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Mutation(() => Boolean)
-    async testMutation(@Arg("message") message: string, @PubSub() pubSub: PubSubEngine) {
-      await pubSub.publish("TEST", message);
-      return false;
+    async resume(@Arg("guildId") guildId: string) {
+      const guild = bot.getActiveGuilds().get(guildId);
+      if (guild == null) {
+        throw new Error(`No guild with guildId : ${guildId}`);
+      }
+      if (guild.audioPlayer == null) {
+        throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
+      }
+
+      logger.info(`Command "resume" executed from the dashboard in guild "${guild.guildInfo.name}"`);
+      return guild.audioPlayer.unpause();
     }
 
-    @Subscription(() => String, { topics: "TEST" })
-    async guildUpdated(@Root() message: string) {
-      return message;
+    @Mutation(() => Boolean)
+    async pause(@Arg("guildId") guildId: string) {
+      const guild = bot.getActiveGuilds().get(guildId);
+      if (guild == null) {
+        throw new Error(`No guild with guildId : ${guildId}`);
+      }
+      if (guild.audioPlayer == null) {
+        throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
+      }
+
+      logger.info(`Command "pause" executed from the dashboard in guild "${guild.guildInfo.name}"`);
+      return guild.audioPlayer.pause(true);
+    }
+
+    @Mutation(() => Boolean)
+    async skip(@Arg("guildId") guildId: string) {
+      const guild = bot.getActiveGuilds().get(guildId);
+      if (guild == null) {
+        throw new Error(`No guild with guildId : ${guildId}`);
+      }
+      if (guild.audioPlayer == null) {
+        throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
+      }
+
+      logger.info(`Command "skip" executed from the dashboard in guild "${guild.guildInfo.name}"`);
+      return guild.audioPlayer.stop();
+    }
+
+    @Subscription(() => Guild, {
+      topics: "GUILD_UPDATED",
+      filter: ({ payload, args }) => payload.guildInfo.id === args.guildId,
+    })
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: string) {
+      return {
+        id: guild.guildInfo.id,
+        name: guild.guildInfo.name,
+        icon: guild.guildInfo.icon,
+        currentlyPlaying: guild.currentlyPlaying,
+        playbackStatus: {
+          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+        },
+        queue: guild.queue,
+      };
     }
   }
 

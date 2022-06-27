@@ -1,7 +1,7 @@
 import { Song } from "../../../../apollo/generated";
 import { SongEntry } from "./SongEntry";
 
-export function Queue({ queue }: { queue: Song[] }) {
+export function Queue({ currentSong, queue }: { currentSong?: Song; queue: Song[] }) {
   return (
     <div className="bg-gray-3 rounded-tr-md h-full">
       <div className="flex flex-col h-full">
@@ -13,6 +13,8 @@ export function Queue({ queue }: { queue: Song[] }) {
 
         <div className="relative h-full shadow-inner-bottom">
           <div className="overflow-auto absolute inset-0">
+            {currentSong && <SongEntry song={currentSong} isPlaying />}
+
             {queue.map((s, i) => (
               <SongEntry key={s.url} song={s} index={i + 1} />
             ))}

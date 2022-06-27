@@ -39,3 +39,36 @@ query logs($limit: Int) {
 mutation registerCommands {
   registerCommands
 }
+
+mutation resume($guildId: String!) {
+  resume(guildId: $guildId)
+}
+
+mutation pause($guildId: String!) {
+  pause(guildId: $guildId)
+}
+
+mutation skip($guildId: String!) {
+  skip(guildId: $guildId)
+}
+
+subscription guildUpdated($guildId: String!) {
+  guildUpdated(guildId: $guildId) {
+    id
+    currentlyPlaying {
+      title
+      url
+      thumbnail
+      duration
+    }
+    playbackStatus {
+      isPlaying
+    }
+    queue {
+      title
+      url
+      thumbnail
+      duration
+    }
+  }
+}

@@ -32,6 +32,7 @@
     "express": "^4.18.1",
     "ffmpeg-static": "^5.0.0",
     "graphql": "^15.8.0",
+    "graphql-subscriptions": "^2.0.0",
     "graphql-ws": "^5.9.0",
     "libsodium-wrappers": "^0.7.10",
     "opusscript": "^0.0.8",
