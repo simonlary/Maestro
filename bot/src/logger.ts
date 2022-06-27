@@ -8,7 +8,7 @@ interface Log {
 const MAX_LOGS_SIZE = 2000;
 const LIMIT_LOGS_SIZE_DELAY_IN_MS = 1000;
 
-const logger = new class {
+const logger = new (class {
   private readonly _logs: Log[] = [];
   private _nextId = 0;
 
@@ -49,6 +49,6 @@ const logger = new class {
       this._logs.length = MAX_LOGS_SIZE;
     }
   }
-};
+})();
 
 export { logger };
