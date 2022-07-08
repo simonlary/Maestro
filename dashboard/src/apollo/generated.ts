@@ -37,8 +37,9 @@ export type Log = {
 export type Mutation = {
   __typename?: 'Mutation';
   pause: Scalars['Boolean'];
+  queueSong: Scalars['String'];
   registerCommands: Scalars['Boolean'];
-  removeQueuedSong: Scalars['Int'];
+  removeQueuedSong: Scalars['String'];
   restart: Scalars['Boolean'];
   resume: Scalars['Boolean'];
   skip: Scalars['Boolean'];
@@ -47,6 +48,12 @@ export type Mutation = {
 
 export type MutationPauseArgs = {
   guildId: Scalars['String'];
+};
+
+
+export type MutationQueueSongArgs = {
+  guildId: Scalars['String'];
+  songUrl: Scalars['String'];
 };
 
 
@@ -186,7 +193,15 @@ export type RemoveQueuedSongMutationVariables = Exact<{
 }>;
 
 
-export type RemoveQueuedSongMutation = { __typename?: 'Mutation', removeQueuedSong: number };
+export type RemoveQueuedSongMutation = { __typename?: 'Mutation', removeQueuedSong: string };
+
+export type QueueSongMutationVariables = Exact<{
+  guildId: Scalars['String'];
+  songUrl: Scalars['String'];
+}>;
+
+
+export type QueueSongMutation = { __typename?: 'Mutation', queueSong: string };
 
 export type GuildUpdatedSubscriptionVariables = Exact<{
   guildId: Scalars['String'];
@@ -580,6 +595,38 @@ export function useRemoveQueuedSongMutation(baseOptions?: Apollo.MutationHookOpt
 export type RemoveQueuedSongMutationHookResult = ReturnType<typeof useRemoveQueuedSongMutation>;
 export type RemoveQueuedSongMutationResult = Apollo.MutationResult<RemoveQueuedSongMutation>;
 export type RemoveQueuedSongMutationOptions = Apollo.BaseMutationOptions<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>;
+export const QueueSongDocument = gql`
+    mutation queueSong($guildId: String!, $songUrl: String!) {
+  queueSong(guildId: $guildId, songUrl: $songUrl)
+}
+    `;
+export type QueueSongMutationFn = Apollo.MutationFunction<QueueSongMutation, QueueSongMutationVariables>;
+
+/**
+ * __useQueueSongMutation__
+ *
+ * To run a mutation, you first call `useQueueSongMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueSongMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueSongMutation, { data, loading, error }] = useQueueSongMutation({
+ *   variables: {
+ *      guildId: // value for 'guildId'
+ *      songUrl: // value for 'songUrl'
+ *   },
+ * });
+ */
+export function useQueueSongMutation(baseOptions?: Apollo.MutationHookOptions<QueueSongMutation, QueueSongMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueSongMutation, QueueSongMutationVariables>(QueueSongDocument, options);
+      }
+export type QueueSongMutationHookResult = ReturnType<typeof useQueueSongMutation>;
+export type QueueSongMutationResult = Apollo.MutationResult<QueueSongMutation>;
+export type QueueSongMutationOptions = Apollo.BaseMutationOptions<QueueSongMutation, QueueSongMutationVariables>;
 export const GuildUpdatedDocument = gql`
     subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {

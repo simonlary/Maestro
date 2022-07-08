@@ -44,11 +44,11 @@ export function GuildPage() {
   ) : (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex h-full gap-1 overflow-hidden rounded-tl-md">
-        <div className="flex-1">
+        <div className="w-1/2">
           <Queue currentSong={data.guild.currentlyPlaying} queue={data.guild.queue} guildId={guildId} />
         </div>
-        <div className="flex-1">
-          <Search />
+        <div className="w-1/2">
+          <Search guildId={guildId} />
         </div>
       </div>
 

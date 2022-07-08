@@ -95,6 +95,28 @@ export class Bot {
     return song;
   }
 
+  public async queueSong(guildId: Snowflake, url: string) {
+    const songInfo = await playdl.video_info(url);
+    const song = {
+      id: crypto.randomUUID(),
+      title: songInfo.video_details.title ?? "",
+      url: songInfo.video_details.url,
+      thumbnail: songInfo.video_details.thumbnails[0].url,
+      duration: songInfo.video_details.durationInSec,
+    };
+
+    const activeGuild = this.activeGuilds.get(guildId);
+    if (activeGuild == null) {
+      throw new Error(`Bot is not present in the guild ${guildId}.`);
+    }
+
+    activeGuild.queue.push(song);
+    logger.info(`Queued song "${song.title}" in guild "${activeGuild.guildInfo.name}"`);
+    this.guildUpdated(activeGuild);
+
+    return song;
+  }
+
   public shutdown() {
     logger.info("Shutting down...");
     this.client.destroy();
@@ -228,13 +250,7 @@ export class Bot {
       this.guildUpdated(activeGuild);
     }
 
-    const embed = new MessageEmbed()
-      .setTitle("Queued Song")
-      .setColor(0x6bed0e)
-      .setDescription(`[${song.title}](${song.url})`)
-      .setThumbnail(song.thumbnail);
     await interaction.editReply({ content: "Successfully added a song to the queue!" });
-    await interaction.followUp({ embeds: [embed] });
   };
 
   private playNext = async (activeGuild: ActiveGuild) => {

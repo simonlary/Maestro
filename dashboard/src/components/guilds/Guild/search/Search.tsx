@@ -3,7 +3,7 @@ import { SearchEntry } from "./SearchEntry";
 import { FormEvent, useState } from "react";
 import { useSearchSongsLazyQuery } from "../../../../apollo/generated";
 
-export function Search() {
+export function Search({ guildId }: { guildId: string }) {
   const [query, setQuery] = useState("");
   const [getSongs, { data: songsQuery, loading }] = useSearchSongsLazyQuery();
 
@@ -14,7 +14,7 @@ export function Search() {
 
   return (
     <div className="h-full bg-gray-3 rounded-tl-md">
-      <div className="flex flex-col">
+      <div className="flex flex-col h-full">
         <div className="px-4 py-2">
           <form className="flex w-full h-11 bg-gray-2 rounded items-center" onSubmit={submit}>
             <input
@@ -29,11 +29,11 @@ export function Search() {
           </form>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1 relative overflow-auto pb-4">
           {!loading &&
             songsQuery != null &&
             songsQuery.searchSongs.length > 0 &&
-            songsQuery.searchSongs.map(song => <SearchEntry key={song.id} song={song} />)}
+            songsQuery.searchSongs.map((song) => <SearchEntry key={song.id} song={song} guildId={guildId} />)}
         </div>
       </div>
     </div>

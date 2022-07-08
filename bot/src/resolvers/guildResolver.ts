@@ -84,9 +84,15 @@ export function createGuildResolver(bot: Bot) {
       return guild.audioPlayer.stop();
     }
 
-    @Mutation(() => Int)
+    @Mutation(() => String)
     async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId") songId: string) {
       const song = bot.removeSongFromQueue(guildId, songId);
+      return song.id;
+    }
+
+    @Mutation(() => String)
+    async queueSong(@Arg("guildId") guildId: Snowflake, @Arg("songUrl") songUrl: string) {
+      const song = await bot.queueSong(guildId, songUrl);
       return song.id;
     }
 

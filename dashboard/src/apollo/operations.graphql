@@ -78,6 +78,10 @@ mutation removeQueuedSong($guildId: String!, $songId: String!) {
   removeQueuedSong(guildId: $guildId, songId: $songId)
 }
 
+mutation queueSong($guildId: String!, $songUrl: String!) {
+  queueSong(guildId: $guildId, songUrl: $songUrl)
+}
+
 subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {
     id
