@@ -9,6 +9,15 @@ module.exports = {
         bottom: "0 10px 15px 0 rgb(0 0 0 / 0.1)",
         "inner-bottom": "inset  0 -10px 15px 0 rgb(0 0 0 / 0.1)",
       },
+      animation: {
+        fadein: "fadein 0.3s ease-in-out",
+      },
+      keyframes: {
+        fadein: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
     },
     colors: {
       blue: "#5865f2",

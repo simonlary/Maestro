@@ -28,7 +28,7 @@ export function SearchEntry({ song, guildId }: { song: Song; guildId: string }) 
   return (
     <div className="flex justify-between items-center p-2 hover:bg-gray-2">
       <div className="flex flex-1 truncate px-3 items-center gap-3">
-        <div className="rounded overflow-hidden w-10 h-10 bg-white">
+        <div className="rounded overflow-hidden w-10 h-10 bg-white animate-fadein">
           <img src={song.thumbnail} alt="Song thumbnail" className="w-full h-full object-cover" />
         </div>
         <span className="flex-1 truncate font-semibold">{song.title}</span>
