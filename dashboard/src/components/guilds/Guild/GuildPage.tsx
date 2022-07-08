@@ -43,11 +43,11 @@ export function GuildPage() {
     <NoGuildPage />
   ) : (
     <div className="h-full flex flex-col">
-      <div className="flex-1 flex h-full gap-1 overflow-hidden rounded-tl-md">
-        <div className="w-1/2">
+      <div className="flex-1 relative h-full overflow-hidden rounded-tl-md">
+        <div className="absolute left-0 top-0 bottom-0 w-1/2 pr-1">
           <Queue currentSong={data.guild.currentlyPlaying} queue={data.guild.queue} guildId={guildId} />
         </div>
-        <div className="w-1/2">
+        <div className="absolute right-0 top-0 bottom-0 w-1/2 pl-1">
           <Search guildId={guildId} />
         </div>
       </div>

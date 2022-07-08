@@ -1,16 +1,19 @@
-import { ApolloClient, HttpLink, InMemoryCache, split } from "@apollo/client";
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, split } from "@apollo/client";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 
 export function createApolloClient() {
   const httpLink = new HttpLink({
-    uri: "http://localhost:3001/",
+    uri: `http://${process.env.REACT_APP_BOT_URL}`,
   });
 
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: "ws://localhost:3001/",
+      url: `ws://${process.env.REACT_APP_BOT_URL}`,
+      connectionParams: {
+        authorization: process.env.REACT_APP_DASHBOARD_TOKEN,
+      },
     })
   );
 
@@ -23,8 +26,13 @@ export function createApolloClient() {
     httpLink
   );
 
+  const httpAuth = new ApolloLink((operation, forward) => {
+    operation.setContext({ headers: { authorization: process.env.REACT_APP_DASHBOARD_TOKEN } });
+    return forward(operation);
+  });
+
   return new ApolloClient({
-    link: splitLink,
+    link: httpAuth.concat(splitLink),
     cache: new InMemoryCache(),
   });
 }

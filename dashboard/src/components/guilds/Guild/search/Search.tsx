@@ -1,15 +1,20 @@
 import { BiSearchAlt2 } from "react-icons/bi";
 import { SearchEntry } from "./SearchEntry";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useSearchSongsLazyQuery } from "../../../../apollo/generated";
+import { Spinner } from "../../../controls/Spinner";
 
 export function Search({ guildId }: { guildId: string }) {
   const [query, setQuery] = useState("");
   const [getSongs, { data: songsQuery, loading }] = useSearchSongsLazyQuery();
+  const searchRef = useRef<HTMLInputElement>(null);
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (query !== "") getSongs({ variables: { query } });
+    if (query !== "") {
+      getSongs({ variables: { query } });
+      searchRef.current?.blur();
+    }
   }
 
   return (
@@ -22,6 +27,8 @@ export function Search({ guildId }: { guildId: string }) {
               placeholder="Search"
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
+              onFocus={(e) => e.currentTarget.select()}
+              ref={searchRef}
             />
             <button type="submit">
               <BiSearchAlt2 className="h-10 w-10 bg-gray-2 px-2 outline-none rounded" />
@@ -29,11 +36,16 @@ export function Search({ guildId }: { guildId: string }) {
           </form>
         </div>
 
-        <div className="flex flex-col flex-1 relative overflow-auto pb-4">
-          {!loading &&
+        <div className="flex flex-col flex-1 relative overflow-y-scroll pb-4">
+          {loading ? (
+            <div className="m-auto">
+                <Spinner className="text-3xl" />
+            </div>
+          ) : (
             songsQuery != null &&
             songsQuery.searchSongs.length > 0 &&
-            songsQuery.searchSongs.map((song) => <SearchEntry key={song.id} song={song} guildId={guildId} />)}
+            songsQuery.searchSongs.map((song) => <SearchEntry key={song.id} song={song} guildId={guildId} />)
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    TOKEN: string | undefined;
-    DEBUG_GUILDS: string | undefined;
-    APOLLO_SERVER_PORT: string | undefined;
+    readonly TOKEN?: string;
+    readonly DEBUG_GUILDS?: string;
+    readonly APOLLO_SERVER_PORT?: string;
+    readonly DASHBOARD_TOKEN?: string;
   }
 }

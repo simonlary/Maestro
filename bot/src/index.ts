@@ -16,6 +16,7 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
+import { authChecker, createContext, createWsContext } from "./authentification.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,6 +34,7 @@ const schema = await buildSchema({
   resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver(), createSongResolver()],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
+  authChecker,
 });
 
 logger.info("Creating HTTP server...");
@@ -44,11 +46,18 @@ const wsServer = new WebSocketServer({
   server: httpServer,
   path: "/",
 });
-const serverCleanup = useServer({ schema }, wsServer);
+const serverCleanup = useServer(
+  {
+    schema,
+    context: createWsContext,
+  },
+  wsServer
+);
 
 logger.info("Creating Apollo server...");
 const server = new ApolloServer({
   schema,
+  context: createContext,
   plugins: [
     // Shutdown the HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),

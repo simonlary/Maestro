@@ -250,7 +250,13 @@ export class Bot {
       this.guildUpdated(activeGuild);
     }
 
-    await interaction.editReply({ content: "Successfully added a song to the queue!" });
+    // await interaction.editReply({ content: "Successfully added a song to the queue!" });
+    const embed = new MessageEmbed()
+      .setTitle("Queued Song")
+      .setColor(0x6bed0e)
+      .setDescription(`[${song.title}](${song.url})`)
+      .setThumbnail(song.thumbnail);
+    await interaction.editReply({ embeds: [embed] });
   };
 
   private playNext = async (activeGuild: ActiveGuild) => {

@@ -1,4 +1,4 @@
-import { Mutation, Query, Resolver } from "type-graphql";
+import { Authorized, Mutation, Query, Resolver } from "type-graphql";
 import { Bot } from "../bot.js";
 import { logger } from "../logger.js";
 import { Settings } from "../schema/settings.js";
@@ -10,6 +10,7 @@ export function createSettingsResolver(bot: Bot) {
     private hasAlreadyRegisteredCommands = false;
     private isRestarting = false;
 
+    @Authorized()
     @Mutation(() => Boolean)
     async registerCommands() {
       await bot.registerCommands();
@@ -17,6 +18,7 @@ export function createSettingsResolver(bot: Bot) {
       return true;
     }
 
+    @Authorized()
     @Mutation(() => Boolean)
     async restart() {
       if (this.isRestarting) return false;
@@ -37,6 +39,7 @@ export function createSettingsResolver(bot: Bot) {
       return true;
     }
 
+    @Authorized()
     @Query(() => Settings)
     async settings() {
       return { hasAlreadyRegisteredCommands: this.hasAlreadyRegisteredCommands };
