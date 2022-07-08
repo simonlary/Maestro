@@ -44,6 +44,16 @@ query settings {
   }
 }
 
+query searchSongs($query: String!) {
+  searchSongs(query: $query) {
+      id
+      title
+      url
+      thumbnail
+      duration
+  }
+}
+
 mutation registerCommands {
   registerCommands
 }
@@ -64,7 +74,7 @@ mutation skip($guildId: String!) {
   skip(guildId: $guildId)
 }
 
-mutation removeQueuedSong($guildId: String!, $songId: Int!) {
+mutation removeQueuedSong($guildId: String!, $songId: String!) {
   removeQueuedSong(guildId: $guildId, songId: $songId)
 }
 

@@ -9,6 +9,7 @@ import {
   VoiceConnection,
   VoiceConnectionStatus,
 } from "@discordjs/voice";
+import crypto from "crypto";
 import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
@@ -22,7 +23,7 @@ interface GuildInfo {
 }
 
 interface Song {
-  id: number;
+  id: string;
   title: string;
   url: string;
   thumbnail: string;
@@ -39,7 +40,6 @@ export interface ActiveGuild {
 
 export class Bot {
   private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
-  private _nextId = 0;
 
   public static async create(config: Config, pubSub: PubSubEngine) {
     logger.info("Creating client...");
@@ -77,7 +77,7 @@ export class Bot {
     await registerCommands(this.client, this.config);
   }
 
-  public removeSongFromQueue(guildId: Snowflake, songId: number) {
+  public removeSongFromQueue(guildId: Snowflake, songId: string) {
     const guild = this.activeGuilds.get(guildId);
     if (guild == null) {
       throw new Error(`No guild with guildId : ${guildId}`);
@@ -203,7 +203,7 @@ export class Bot {
 
     const songInfo = await playdl.video_info(url);
     const song = {
-      id: this._nextId++,
+      id: crypto.randomUUID(),
       title: songInfo.video_details.title ?? "",
       url: songInfo.video_details.url,
       thumbnail: songInfo.video_details.thumbnails[0].url,

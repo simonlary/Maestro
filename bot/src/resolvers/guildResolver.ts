@@ -85,7 +85,7 @@ export function createGuildResolver(bot: Bot) {
     }
 
     @Mutation(() => Int)
-    async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId", () => Int) songId: number) {
+    async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId") songId: string) {
       const song = bot.removeSongFromQueue(guildId, songId);
       return song.id;
     }

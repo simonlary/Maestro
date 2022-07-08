@@ -52,7 +52,7 @@ export type MutationPauseArgs = {
 
 export type MutationRemoveQueuedSongArgs = {
   guildId: Scalars['String'];
-  songId: Scalars['Int'];
+  songId: Scalars['String'];
 };
 
 
@@ -75,6 +75,7 @@ export type Query = {
   guild: Guild;
   guilds: Array<Guild>;
   logs: Array<Log>;
+  searchSongs: Array<Song>;
   settings: Settings;
 };
 
@@ -88,6 +89,11 @@ export type QueryLogsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
 };
 
+
+export type QuerySearchSongsArgs = {
+  query: Scalars['String'];
+};
+
 export type Settings = {
   __typename?: 'Settings';
   hasAlreadyRegisteredCommands: Scalars['Boolean'];
@@ -96,7 +102,7 @@ export type Settings = {
 export type Song = {
   __typename?: 'Song';
   duration: Scalars['Int'];
-  id: Scalars['Int'];
+  id: Scalars['String'];
   thumbnail: Scalars['String'];
   title: Scalars['String'];
   url: Scalars['String'];
@@ -122,7 +128,7 @@ export type GuildQueryVariables = Exact<{
 }>;
 
 
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: number, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: number, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
 
 export type LogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -135,6 +141,13 @@ export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SettingsQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', hasAlreadyRegisteredCommands: boolean } };
+
+export type SearchSongsQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type SearchSongsQuery = { __typename?: 'Query', searchSongs: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> };
 
 export type RegisterCommandsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -169,7 +182,7 @@ export type SkipMutation = { __typename?: 'Mutation', skip: boolean };
 
 export type RemoveQueuedSongMutationVariables = Exact<{
   guildId: Scalars['String'];
-  songId: Scalars['Int'];
+  songId: Scalars['String'];
 }>;
 
 
@@ -180,7 +193,7 @@ export type GuildUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: number, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: number, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
 
 
 export const GuildsDocument = gql`
@@ -343,6 +356,45 @@ export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<S
 export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
 export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
 export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
+export const SearchSongsDocument = gql`
+    query searchSongs($query: String!) {
+  searchSongs(query: $query) {
+    id
+    title
+    url
+    thumbnail
+    duration
+  }
+}
+    `;
+
+/**
+ * __useSearchSongsQuery__
+ *
+ * To run a query within a React component, call `useSearchSongsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchSongsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchSongsQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useSearchSongsQuery(baseOptions: Apollo.QueryHookOptions<SearchSongsQuery, SearchSongsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
+      }
+export function useSearchSongsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchSongsQuery, SearchSongsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
+        }
+export type SearchSongsQueryHookResult = ReturnType<typeof useSearchSongsQuery>;
+export type SearchSongsLazyQueryHookResult = ReturnType<typeof useSearchSongsLazyQuery>;
+export type SearchSongsQueryResult = Apollo.QueryResult<SearchSongsQuery, SearchSongsQueryVariables>;
 export const RegisterCommandsDocument = gql`
     mutation registerCommands {
   registerCommands
@@ -497,7 +549,7 @@ export type SkipMutationHookResult = ReturnType<typeof useSkipMutation>;
 export type SkipMutationResult = Apollo.MutationResult<SkipMutation>;
 export type SkipMutationOptions = Apollo.BaseMutationOptions<SkipMutation, SkipMutationVariables>;
 export const RemoveQueuedSongDocument = gql`
-    mutation removeQueuedSong($guildId: String!, $songId: Int!) {
+    mutation removeQueuedSong($guildId: String!, $songId: String!) {
   removeQueuedSong(guildId: $guildId, songId: $songId)
 }
     `;

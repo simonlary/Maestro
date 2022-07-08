@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import { createGuildResolver } from "./resolvers/guildResolver.js";
 import { createSettingsResolver } from "./resolvers/settingsResolver.js";
 import { createLogResolver } from "./resolvers/logResolver.js";
+import { createSongResolver } from "./resolvers/songResolver.js";
 import { logger } from "./logger.js";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
@@ -29,7 +30,7 @@ const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver()],
+  resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver(), createSongResolver()],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
 });

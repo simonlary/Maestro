@@ -2,8 +2,8 @@ import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Song {
-  @Field(() => Int)
-  id!: number;
+  @Field()
+  id!: string;
 
   @Field()
   title!: string;
