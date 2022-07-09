@@ -12,17 +12,7 @@ export function createGuildResolver(bot: Bot) {
     @Query(() => [Guild])
     async guilds() {
       return [...bot.getActiveGuilds().values()].map((activeGuild) => {
-        return {
-          id: activeGuild.guildInfo.id,
-          name: activeGuild.guildInfo.name,
-          icon: activeGuild.guildInfo.icon,
-          currentlyPlaying: activeGuild.currentlyPlaying,
-          playbackStatus: {
-            isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
-            currentTime: activeGuild.audioResource?.playbackDuration,
-          },
-          queue: activeGuild.queue,
-        };
+        return this.activeGuildToGuild(activeGuild);
       });
     }
 
@@ -33,17 +23,7 @@ export function createGuildResolver(bot: Bot) {
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
       }
-      return {
-        id: guild.guildInfo.id,
-        name: guild.guildInfo.name,
-        icon: guild.guildInfo.icon,
-        currentlyPlaying: guild.currentlyPlaying,
-        playbackStatus: {
-          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
-          currentTime: guild.audioResource?.playbackDuration,
-        },
-        queue: guild.queue,
-      };
+      return this.activeGuildToGuild(guild);
     }
 
     @Authorized()
@@ -112,16 +92,20 @@ export function createGuildResolver(bot: Bot) {
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: Snowflake) {
+      return this.activeGuildToGuild(guild);
+    }
+
+    private activeGuildToGuild(activeGuild: ActiveGuild): Guild {
       return {
-        id: guild.guildInfo.id,
-        name: guild.guildInfo.name,
-        icon: guild.guildInfo.icon,
-        currentlyPlaying: guild.currentlyPlaying,
+        id: activeGuild.guildInfo.id,
+        name: activeGuild.guildInfo.name,
+        icon: activeGuild.guildInfo.icon,
+        currentlyPlaying: activeGuild.currentlyPlaying,
         playbackStatus: {
-          isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
-          currentTime: guild.audioResource?.playbackDuration,
+          isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+          currentTime: Math.round((activeGuild.audioResource?.playbackDuration ?? 0) / 1000),
         },
-        queue: guild.queue,
+        queue: activeGuild.queue,
       };
     }
   }

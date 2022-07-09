@@ -20,7 +20,7 @@ import { PubSubEngine } from "graphql-subscriptions";
 interface GuildInfo {
   id: Snowflake;
   name: string;
-  icon: string | null;
+  icon?: string;
 }
 
 interface Song {
@@ -36,8 +36,8 @@ export interface ActiveGuild {
   voiceConnection: VoiceConnection;
   audioResource?: AudioResource;
   audioPlayer?: AudioPlayer;
+  currentlyPlaying: Song;
   queue: Song[];
-  currentlyPlaying?: Song;
 }
 
 export class Bot {
@@ -241,8 +241,8 @@ export class Bot {
         guildId,
         adapterCreator: interaction.guild.voiceAdapterCreator,
       });
-      const guildInfo = { id: guildId, name: interaction.guild.name, icon: interaction.guild.iconURL() };
-      const newActiveGuild = { guildInfo, voiceConnection, queue: [song] };
+      const guildInfo = { id: guildId, name: interaction.guild.name, icon: interaction.guild.iconURL() ?? undefined };
+      const newActiveGuild = { guildInfo, voiceConnection, currentlyPlaying: song, queue: [] };
       this.activeGuilds.set(guildId, newActiveGuild);
       await entersState(voiceConnection, VoiceConnectionStatus.Ready, 5_000);
       await this.playNext(newActiveGuild);
@@ -261,13 +261,6 @@ export class Bot {
   };
 
   private playNext = async (activeGuild: ActiveGuild) => {
-    activeGuild.currentlyPlaying = activeGuild.queue.shift();
-    if (activeGuild.currentlyPlaying == null) {
-      activeGuild.voiceConnection.destroy();
-      this.activeGuilds.delete(activeGuild.guildInfo.id);
-      return;
-    }
-
     const stream = await playdl.stream(activeGuild.currentlyPlaying.url);
     activeGuild.audioResource = createAudioResource(stream.stream, { inputType: stream.type });
     activeGuild.audioPlayer = createAudioPlayer();
@@ -275,7 +268,16 @@ export class Bot {
     activeGuild.voiceConnection.subscribe(activeGuild.audioPlayer);
 
     activeGuild.audioPlayer.on("stateChange", () => this.guildUpdated(activeGuild));
-    activeGuild.audioPlayer.once(AudioPlayerStatus.Idle, () => this.playNext(activeGuild));
+    activeGuild.audioPlayer.once(AudioPlayerStatus.Idle, () => {
+      const nextSong = activeGuild.queue.shift();
+      if (nextSong == null) {
+        activeGuild.voiceConnection.destroy();
+        this.activeGuilds.delete(activeGuild.guildInfo.id);
+      } else {
+        activeGuild.currentlyPlaying = nextSong;
+        this.playNext(activeGuild);
+      }
+    });
     activeGuild.audioPlayer.on("error", (e) => logger.error(e.message));
   };
 
