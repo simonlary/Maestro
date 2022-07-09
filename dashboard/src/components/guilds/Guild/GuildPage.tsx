@@ -5,6 +5,7 @@ import { GuildUpdatedDocument, GuildUpdatedSubscription, useGuildLazyQuery } fro
 import { useEffect } from "react";
 import { NoGuildPage } from "./NoGuildPage";
 import { Player } from "./playback/Player";
+import { Progress } from "./playback/Progress";
 
 export function GuildPage() {
   const { guildId } = useParams();
@@ -52,7 +53,7 @@ export function GuildPage() {
         </div>
       </div>
 
-      <div className="bg-gray-text h-0.5" />
+      <Progress percentage={30} />
 
       <div className="h-20 bg-gray-2">
         <Player song={data.guild.currentlyPlaying} playbackStatus={data.guild.playbackStatus} guildId={guildId ?? ""} />
