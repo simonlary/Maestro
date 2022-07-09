@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Queue } from "./queue/Queue";
 import { Search } from "./search/Search";
 import { GuildUpdatedDocument, GuildUpdatedSubscription, useGuildLazyQuery } from "../../../apollo/generated";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NoGuildPage } from "./NoGuildPage";
 import { Player } from "./playback/Player";
 import { Progress } from "./playback/Progress";
@@ -11,6 +11,19 @@ export function GuildPage() {
   const { guildId } = useParams();
   const navigate = useNavigate();
   const [executeQuery, { data, loading, error, called, subscribeToMore }] = useGuildLazyQuery();
+  const [currentSongTime, setCurrentSongTime] = useState(0);
+
+  useEffect(() => {
+    setCurrentSongTime(data?.guild.playbackStatus.currentTime ?? 0);
+    if (data?.guild.playbackStatus.isPlaying) {
+      const interval = setInterval(() => {
+        setCurrentSongTime((prev) => prev + 0.5);
+      }, 500);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [data]);
 
   useEffect(() => {
     if (guildId == null || guildId === "") {
@@ -53,7 +66,7 @@ export function GuildPage() {
         </div>
       </div>
 
-      <Progress value={data.guild.playbackStatus.currentTime} maximum={data.guild.currentlyPlaying.duration}/>
+      <Progress value={currentSongTime} maximum={data.guild.currentlyPlaying.duration} />
 
       <div className="h-20 bg-gray-2">
         <Player song={data.guild.currentlyPlaying} playbackStatus={data.guild.playbackStatus} guildId={guildId ?? ""} />
