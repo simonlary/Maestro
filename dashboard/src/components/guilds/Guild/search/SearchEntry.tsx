@@ -37,7 +37,10 @@ export function SearchEntry({ song, guildId }: { song: Song; guildId: string }) 
         <RiYoutubeFill className="cursor-pointer" />
       </a>
       <span className="w-24 px-3 font-mono text-right">{formatDuration(song.duration)}</span>
-      <button className="text-green rounded-full bg-gray-2 w-8 h-8 flex justify-center items-center user-select-none hover:bg-green hover:text-white text-xl" onClick={queueSong}>
+      <button
+        className="text-green rounded-full bg-gray-2 w-8 h-8 flex justify-center items-center user-select-none hover:bg-green hover:text-white text-xl"
+        onClick={queueSong}
+      >
         <BsPlusLg className="text-sm" />
       </button>
     </div>

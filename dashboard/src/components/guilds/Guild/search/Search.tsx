@@ -39,7 +39,7 @@ export function Search({ guildId }: { guildId: string }) {
         <div className="flex flex-col flex-1 relative overflow-y-scroll pb-4">
           {loading ? (
             <div className="m-auto">
-                <Spinner className="text-3xl" />
+              <Spinner className="text-3xl" />
             </div>
           ) : (
             songsQuery != null &&
