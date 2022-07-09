@@ -250,7 +250,6 @@ export class Bot {
       this.guildUpdated(activeGuild);
     }
 
-    // await interaction.editReply({ content: "Successfully added a song to the queue!" });
     const embed = new MessageEmbed()
       .setTitle("Queued Song")
       .setColor(0x6bed0e)
