@@ -74,6 +74,7 @@ export type MutationSkipArgs = {
 
 export type PlaybackStatus = {
   __typename?: 'PlaybackStatus';
+  currentTime: Scalars['Int'];
   isPlaying: Scalars['Boolean'];
 };
 
@@ -135,7 +136,7 @@ export type GuildQueryVariables = Exact<{
 }>;
 
 
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
 
 export type LogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -208,7 +209,7 @@ export type GuildUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
 
 
 export const GuildsDocument = gql`
@@ -260,6 +261,7 @@ export const GuildDocument = gql`
     }
     playbackStatus {
       isPlaying
+      currentTime
     }
     queue {
       id
@@ -640,6 +642,7 @@ export const GuildUpdatedDocument = gql`
     }
     playbackStatus {
       isPlaying
+      currentTime
     }
     queue {
       id

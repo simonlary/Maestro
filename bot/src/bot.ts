@@ -2,6 +2,7 @@ import { Client, CommandInteraction, Intents, Interaction, MessageEmbed, Snowfla
 import {
   AudioPlayer,
   AudioPlayerStatus,
+  AudioResource,
   createAudioPlayer,
   createAudioResource,
   entersState,
@@ -33,6 +34,7 @@ interface Song {
 export interface ActiveGuild {
   guildInfo: GuildInfo;
   voiceConnection: VoiceConnection;
+  audioResource?: AudioResource;
   audioPlayer?: AudioPlayer;
   queue: Song[];
   currentlyPlaying?: Song;
@@ -267,9 +269,9 @@ export class Bot {
     }
 
     const stream = await playdl.stream(activeGuild.currentlyPlaying.url);
-    const audioResource = createAudioResource(stream.stream, { inputType: stream.type });
+    activeGuild.audioResource = createAudioResource(stream.stream, { inputType: stream.type });
     activeGuild.audioPlayer = createAudioPlayer();
-    activeGuild.audioPlayer.play(audioResource);
+    activeGuild.audioPlayer.play(activeGuild.audioResource);
     activeGuild.voiceConnection.subscribe(activeGuild.audioPlayer);
 
     activeGuild.audioPlayer.on("stateChange", () => this.guildUpdated(activeGuild));

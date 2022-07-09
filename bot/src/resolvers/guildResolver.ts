@@ -19,6 +19,7 @@ export function createGuildResolver(bot: Bot) {
           currentlyPlaying: activeGuild.currentlyPlaying,
           playbackStatus: {
             isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+            currentTime: activeGuild.audioResource?.playbackDuration,
           },
           queue: activeGuild.queue,
         };
@@ -39,6 +40,7 @@ export function createGuildResolver(bot: Bot) {
         currentlyPlaying: guild.currentlyPlaying,
         playbackStatus: {
           isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+          currentTime: guild.audioResource?.playbackDuration,
         },
         queue: guild.queue,
       };
@@ -117,6 +119,7 @@ export function createGuildResolver(bot: Bot) {
         currentlyPlaying: guild.currentlyPlaying,
         playbackStatus: {
           isPlaying: guild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+          currentTime: guild.audioResource?.playbackDuration,
         },
         queue: guild.queue,
       };

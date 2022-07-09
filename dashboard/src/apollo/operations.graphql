@@ -18,6 +18,7 @@ query guild($guildId: String!) {
     }
     playbackStatus {
       isPlaying
+      currentTime
     }
     queue {
       id
@@ -94,6 +95,7 @@ subscription guildUpdated($guildId: String!) {
     }
     playbackStatus {
       isPlaying
+      currentTime
     }
     queue {
       id
