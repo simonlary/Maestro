@@ -24,7 +24,7 @@ module.exports = {
       "blue-hover": "#4752c4",
       green: "#44be6b",
       white: "#e4e4e4",
-      "soft-white": "#c0c0c0",
+      "soft-white": "#909090",
       code: "#121314",
       "gray-1": "#202225",
       "gray-2": "#2f3136",
