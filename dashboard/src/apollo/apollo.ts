@@ -7,10 +7,6 @@ const isProduction = process.env.NODE_ENV === "production";
 const BOT_URL = isProduction ? window.BOT_URL : process.env.REACT_APP_BOT_URL;
 const DASHBOARD_TOKEN = isProduction ? window.DASHBOARD_TOKEN : process.env.REACT_APP_DASHBOARD_TOKEN;
 
-console.log(isProduction);
-console.log(BOT_URL);
-console.log(DASHBOARD_TOKEN);
-
 export function createApolloClient() {
   const httpLink = new HttpLink({
     uri: `http://${BOT_URL}`,
