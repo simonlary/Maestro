@@ -7,15 +7,17 @@ import {
   useResumeMutation,
   useSkipMutation,
 } from "../../../../apollo/generated";
+import { formatDuration } from "../../../../utils";
 import empty from "./empty.mp3";
 
 interface PlayerProps {
   song: Song;
   playbackStatus: PlaybackStatus;
   guildId: string;
+  currentSongTime: number;
 }
 
-export function Player({ song, playbackStatus, guildId }: PlayerProps) {
+export function Player({ song, playbackStatus, guildId, currentSongTime }: PlayerProps) {
   const isPlaying = playbackStatus?.isPlaying || false;
 
   const [resume] = useResumeMutation({ variables: { guildId } });
@@ -77,7 +79,9 @@ export function Player({ song, playbackStatus, guildId }: PlayerProps) {
         )}
         <RiSkipForwardFill className="cursor-pointer" onClick={() => skip()} />
       </div>
-      <div className="w-96"></div>
+      <div className="w-96 flex items-center justify-center">
+        {formatDuration(currentSongTime)}&nbsp;/&nbsp;{formatDuration(song.duration)}
+      </div>
       <audio ref={audioRef} src={empty} loop autoPlay />
     </div>
   );

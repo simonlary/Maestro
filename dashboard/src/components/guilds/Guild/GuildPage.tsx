@@ -69,7 +69,12 @@ export function GuildPage() {
       <Progress value={currentSongTime} maximum={data.guild.currentlyPlaying.duration} />
 
       <div className="h-20 bg-gray-2">
-        <Player song={data.guild.currentlyPlaying} playbackStatus={data.guild.playbackStatus} guildId={guildId ?? ""} />
+        <Player
+          song={data.guild.currentlyPlaying}
+          playbackStatus={data.guild.playbackStatus}
+          guildId={guildId ?? ""}
+          currentSongTime={currentSongTime}
+        />
       </div>
     </div>
   );
