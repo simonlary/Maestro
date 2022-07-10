@@ -9,6 +9,7 @@ import {
 } from "../../../../apollo/generated";
 import { formatDuration } from "../../../../utils";
 import empty from "./empty.mp3";
+import { Progress } from "./Progress";
 
 interface PlayerProps {
   song: Song;
@@ -63,26 +64,36 @@ export function Player({ song, playbackStatus, guildId, currentSongTime }: Playe
   }, [song, didSetAudioPlayer]);
 
   return (
-    <div className="flex justify-between select-none">
-      <div className="flex w-96 items-center gap-4 ">
-        <div className="w-20 h-20 flex-shrink-0 bg-blue">
-          <img src={song.thumbnail} alt="" className="h-full object-cover" />
+    <div className="h-full flex flex-col">
+      <Progress value={currentSongTime} maximum={song.duration} />
+
+      <div className="flex justify-between select-none flex-1">
+        {/* Thumbnail / Title */}
+        <div className="flex w-96 items-center gap-4 pl-4">
+          <div className="w-16 h-16 flex-shrink-0 bg-blue">
+            <img src={song.thumbnail} alt="" className="h-full object-cover" />
+          </div>
+          <div className="line-clamp-2">{song.title}</div>
         </div>
-        <div className="line-clamp-2">{song.title}</div>
+
+        {/* Controls */}
+        <div className="flex items-center justify-center gap-4 text-2xl flex-grow">
+          <RiSkipBackFill className="invisible" />
+          {isPlaying ? (
+            <RiPauseFill className="text-5xl cursor-pointer" onClick={() => pause()} />
+          ) : (
+            <RiPlayFill className="text-5xl cursor-pointer" onClick={() => resume()} />
+          )}
+          <RiSkipForwardFill className="cursor-pointer" onClick={() => skip()} />
+        </div>
+
+        {/* Duration */}
+        <div className="w-96 flex items-center justify-end pr-4">
+          {formatDuration(currentSongTime)}&nbsp;/&nbsp;{formatDuration(song.duration)}
+        </div>
+
+        <audio ref={audioRef} src={empty} loop autoPlay />
       </div>
-      <div className="flex items-center justify-center gap-4 text-2xl flex-grow">
-        <RiSkipBackFill className="invisible" />
-        {isPlaying ? (
-          <RiPauseFill className="text-5xl cursor-pointer" onClick={() => pause()} />
-        ) : (
-          <RiPlayFill className="text-5xl cursor-pointer" onClick={() => resume()} />
-        )}
-        <RiSkipForwardFill className="cursor-pointer" onClick={() => skip()} />
-      </div>
-      <div className="w-96 flex items-center justify-center">
-        {formatDuration(currentSongTime)}&nbsp;/&nbsp;{formatDuration(song.duration)}
-      </div>
-      <audio ref={audioRef} src={empty} loop autoPlay />
     </div>
   );
 }

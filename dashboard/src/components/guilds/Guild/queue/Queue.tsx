@@ -22,7 +22,7 @@ export function Queue({ currentSong, queue, guildId }: { currentSong: Song; queu
           <span className="flex-none w-26 px-3 text-right">DURATION</span>
         </div>
 
-        <div className="relative h-full shadow-inner-bottom">
+        <div className="relative h-full">
           <div className="overflow-auto absolute inset-0">
             {currentSong && <SongEntry song={currentSong} onRemove={() => removeSong(currentSong)} isPlaying />}
 
