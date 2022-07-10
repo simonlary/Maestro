@@ -19,7 +19,7 @@ export function Queue({ currentSong, queue, guildId }: { currentSong: Song; queu
         <div className="flex font-semibold py-2">
           <span className="flex-none w-11 px-1 text-right">#</span>
           <span className="flex-1 px-3 truncate">TITLE</span>
-          <span className="flex-none w-26 px-3 text-right">DURATION</span>
+          <span className="flex-none w-26 px-3 text-right hidden sm:block">DURATION</span>
         </div>
 
         <div className="relative h-full">

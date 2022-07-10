@@ -21,9 +21,9 @@ export function Search({ guildId }: { guildId: string }) {
     <div className="h-full bg-gray-3 rounded-tl-md">
       <div className="flex flex-col h-full">
         <div className="px-4 py-2">
-          <form className="flex w-full h-11 bg-gray-2 rounded items-center" onSubmit={submit}>
+          <form className="flex w-full h-11 bg-gray-2 rounded items-center overflow-hidden" onSubmit={submit}>
             <input
-              className="px-2 outline-none bg-gray-2 h-8 rounded flex-grow text-lg"
+              className="px-2 outline-none min-w-0 bg-gray-2 h-8 rounded flex-grow text-lg"
               placeholder="Search"
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
