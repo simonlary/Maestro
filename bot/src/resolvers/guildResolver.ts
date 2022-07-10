@@ -10,7 +10,7 @@ export function createGuildResolver(bot: Bot) {
   class GuildResolver {
     @Authorized()
     @Query(() => [Guild])
-    async guilds() {
+    async guilds(): Promise<Guild[]> {
       return [...bot.getActiveGuilds().values()].map((activeGuild) => {
         return this.activeGuildToGuild(activeGuild);
       });
@@ -18,7 +18,7 @@ export function createGuildResolver(bot: Bot) {
 
     @Authorized()
     @Query(() => Guild)
-    async guild(@Arg("guildId") guildId: Snowflake) {
+    async guild(@Arg("guildId") guildId: Snowflake): Promise<Guild> {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -28,7 +28,7 @@ export function createGuildResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => Boolean)
-    async resume(@Arg("guildId") guildId: Snowflake) {
+    async resume(@Arg("guildId") guildId: Snowflake): Promise<boolean> {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -43,7 +43,7 @@ export function createGuildResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => Boolean)
-    async pause(@Arg("guildId") guildId: Snowflake) {
+    async pause(@Arg("guildId") guildId: Snowflake): Promise<boolean> {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -58,7 +58,7 @@ export function createGuildResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => Boolean)
-    async skip(@Arg("guildId") guildId: Snowflake) {
+    async skip(@Arg("guildId") guildId: Snowflake): Promise<boolean> {
       const guild = bot.getActiveGuilds().get(guildId);
       if (guild == null) {
         throw new Error(`No guild with guildId : ${guildId}`);
@@ -73,14 +73,14 @@ export function createGuildResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => String)
-    async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId") songId: string) {
+    async removeQueuedSong(@Arg("guildId") guildId: Snowflake, @Arg("songId") songId: string): Promise<string> {
       const song = bot.removeSongFromQueue(guildId, songId);
       return song.id;
     }
 
     @Authorized()
     @Mutation(() => String)
-    async queueSong(@Arg("guildId") guildId: Snowflake, @Arg("songUrl") songUrl: string) {
+    async queueSong(@Arg("guildId") guildId: Snowflake, @Arg("songUrl") songUrl: string): Promise<string> {
       const song = await bot.queueSong(guildId, songUrl);
       return song.id;
     }
@@ -91,7 +91,7 @@ export function createGuildResolver(bot: Bot) {
       filter: ({ payload, args }) => payload.guildInfo.id === args.guildId,
     })
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: Snowflake) {
+    async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: Snowflake): Promise<Guild> {
       return this.activeGuildToGuild(guild);
     }
 

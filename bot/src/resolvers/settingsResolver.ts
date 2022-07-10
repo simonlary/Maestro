@@ -12,7 +12,7 @@ export function createSettingsResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => Boolean)
-    async registerCommands() {
+    async registerCommands(): Promise<boolean> {
       await bot.registerCommands();
       this.hasAlreadyRegisteredCommands = true;
       return true;
@@ -20,7 +20,7 @@ export function createSettingsResolver(bot: Bot) {
 
     @Authorized()
     @Mutation(() => Boolean)
-    async restart() {
+    async restart(): Promise<boolean> {
       if (this.isRestarting) return false;
       this.isRestarting = true;
 
@@ -41,7 +41,7 @@ export function createSettingsResolver(bot: Bot) {
 
     @Authorized()
     @Query(() => Settings)
-    async settings() {
+    async settings(): Promise<Settings> {
       return { hasAlreadyRegisteredCommands: this.hasAlreadyRegisteredCommands };
     }
   }

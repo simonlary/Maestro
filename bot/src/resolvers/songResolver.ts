@@ -8,11 +8,11 @@ export function createSongResolver() {
   class SongResolver {
     @Authorized()
     @Query(() => [Song])
-    async searchSongs(@Arg("query") query: string) {
+    async searchSongs(@Arg("query") query: string): Promise<Song[]> {
       const searchResult = await playdl.search(query);
       return searchResult.map((result) => ({
         id: crypto.randomUUID(),
-        title: result.title,
+        title: result.title ?? result.url,
         url: result.url,
         thumbnail: result.thumbnails[0].url,
         duration: result.durationInSec,

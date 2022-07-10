@@ -7,7 +7,7 @@ export function createLogResolver() {
   class LogResolver {
     @Authorized()
     @Query(() => [Log])
-    async logs(@Arg("limit", () => Int, { defaultValue: 10 }) limit: number) {
+    async logs(@Arg("limit", () => Int, { defaultValue: 10 }) limit: number): Promise<Log[]> {
       return logger.logs.slice(0, limit);
     }
   }
