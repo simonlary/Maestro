@@ -16,9 +16,9 @@ export function GuildPage() {
   useEffect(() => {
     setCurrentSongTime(data?.guild.playbackStatus.currentTime ?? 0);
     if (data?.guild.playbackStatus.isPlaying) {
-      const interval = setInterval(() => {
-        setCurrentSongTime((prev) => prev + 0.5);
-      }, 500);
+      const startSongTime = data.guild.playbackStatus.currentTime;
+      const startTimestamp = Date.now();
+      const interval = setInterval(() => setCurrentSongTime(startSongTime + (Date.now() - startTimestamp) / 1000), 500);
       return () => {
         clearInterval(interval);
       };
