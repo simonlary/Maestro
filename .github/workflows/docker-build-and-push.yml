@@ -17,7 +17,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: "bot"
+          context: ./bot
           push: true
           tags: simonlary/maestro:latest
 
@@ -33,6 +33,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: "dashboard"
+          context: ./dashboard
           push: true
           tags: simonlary/maestro-dashboard:latest
