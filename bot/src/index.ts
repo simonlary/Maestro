@@ -82,8 +82,9 @@ const server = new ApolloServer({
 logger.info("Starting Apollo server...");
 await server.start();
 server.applyMiddleware({ app, path: "/" });
-await new Promise<void>((resolve) => httpServer.listen({ port: config.apolloServerPort }, resolve));
-logger.info(`Listening on: http://localhost:${config.apolloServerPort}`);
+const port = process.env.PORT || 3001;
+await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+logger.info(`Listening on: http://localhost:${port}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();
