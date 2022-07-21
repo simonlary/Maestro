@@ -1,0 +1,108 @@
+query guilds {
+  guilds {
+    id
+    name
+    icon
+  }
+}
+
+query guild($guildId: String!) {
+  guild(guildId: $guildId) {
+    id
+    currentlyPlaying {
+      id
+      title
+      url
+      thumbnail
+      duration
+    }
+    playbackStatus {
+      isPlaying
+      currentTime
+    }
+    queue {
+      id
+      title
+      url
+      thumbnail
+      duration
+    }
+  }
+}
+
+query logs($limit: Int) {
+  logs(limit: $limit) {
+    id
+    timestamp
+    level
+    message
+  }
+}
+
+query settings {
+  settings {
+    hasAlreadyRegisteredCommands
+  }
+}
+
+query searchSongs($query: String!) {
+  searchSongs(query: $query) {
+      id
+      title
+      url
+      thumbnail
+      duration
+  }
+}
+
+mutation registerCommands {
+  registerCommands
+}
+
+mutation restart {
+  restart
+}
+
+mutation resume($guildId: String!) {
+  resume(guildId: $guildId)
+}
+
+mutation pause($guildId: String!) {
+  pause(guildId: $guildId)
+}
+
+mutation skip($guildId: String!) {
+  skip(guildId: $guildId)
+}
+
+mutation removeQueuedSong($guildId: String!, $songId: String!) {
+  removeQueuedSong(guildId: $guildId, songId: $songId)
+}
+
+mutation queueSong($guildId: String!, $songUrl: String!) {
+  queueSong(guildId: $guildId, songUrl: $songUrl)
+}
+
+subscription guildUpdated($guildId: String!) {
+  guildUpdated(guildId: $guildId) {
+    id
+    currentlyPlaying {
+      id
+      title
+      url
+      thumbnail
+      duration
+    }
+    playbackStatus {
+      isPlaying
+      currentTime
+    }
+    queue {
+      id
+      title
+      url
+      thumbnail
+      duration
+    }
+  }
+}

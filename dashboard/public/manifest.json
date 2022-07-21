@@ -1,0 +1,40 @@
+{
+  "short_name": "Maestro",
+  "name": "Maestro Dashboard",
+  "description": "A dashboard to control the Maestro Discord bot.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "2048x2048",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.ico",
+      "sizes": "128x128",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Guilds",
+      "url": "/guilds"
+    },
+    {
+      "name": "Logs",
+      "url": "/logs"
+    },
+    {
+      "name": "Settings",
+      "url": "/settings"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#d3302c",
+  "background_color": "#202225"
+}
