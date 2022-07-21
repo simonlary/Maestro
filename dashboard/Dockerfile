@@ -10,4 +10,5 @@ ENV NODE_ENV=production
 RUN mkdir /app
 COPY --from=builder /app/build /app
 COPY --from=builder /app/scripts/* /docker-entrypoint.d
+RUN chmod +x /docker-entrypoint.d/*
 COPY nginx.conf /etc/nginx/nginx.conf
