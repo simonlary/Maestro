@@ -2,7 +2,7 @@ name: Build Bot
 
 on:
   push:
-    branches: [master, dashboard]
+    branches: [master]
     paths:
       - "bot/**"
 

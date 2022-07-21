@@ -2,7 +2,7 @@ name: Build Dashboard
 
 on:
   push:
-    branches: [master, dashboard]
+    branches: [master]
     paths:
       - "dashboard/**"
 
