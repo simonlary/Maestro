@@ -47,11 +47,11 @@ query settings {
 
 query searchSongs($query: String!) {
   searchSongs(query: $query) {
-      id
-      title
-      url
-      thumbnail
-      duration
+    id
+    title
+    url
+    thumbnail
+    duration
   }
 }
 
