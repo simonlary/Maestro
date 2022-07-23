@@ -1,29 +1,42 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
+import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
 import { Context } from "../authentification.js";
-import { ActiveGuild } from "../bot.js";
 import { logger } from "../utils/logger.js";
 import { Guild } from "../schema/guild.js";
+import { PlaybackStatus } from "../schema/playbackStatus.js";
+import { GuildData } from "../discord.js";
 
 @Resolver(Guild)
 export class GuildResolver {
   @Authorized()
   @Query(() => [Guild])
   async guilds(@Ctx() context: Context): Promise<Guild[]> {
-    return [...context.bot.getActiveGuilds().values()].map((activeGuild) => {
-      return this.activeGuildToGuild(activeGuild);
-    });
+    return context.user?.guilds.map(this.guildDataToGuild) ?? [];
   }
 
   @Authorized()
   @Query(() => Guild)
   async guild(@Ctx() context: Context, @Arg("guildId") guildId: Snowflake): Promise<Guild> {
-    const guild = context.bot.getActiveGuilds().get(guildId);
-    if (guild == null) {
+    const guildData = context.user?.guilds.find((g) => g.id === guildId);
+    if (guildData == null) {
       throw new Error(`No guild with guildId : ${guildId}`);
     }
-    return this.activeGuildToGuild(guild);
+    return this.guildDataToGuild(guildData);
+  }
+
+  @FieldResolver()
+  async playbackStatus(@Ctx() context: Context, @Root() guild: Guild): Promise<PlaybackStatus | undefined> {
+    const activeGuild = context.bot.getActiveGuilds().get(guild.id);
+    if (activeGuild == null) {
+      return undefined;
+    }
+    return {
+      isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
+      currentTime: Math.round((activeGuild.audioResource?.playbackDuration ?? 0) / 1000),
+      currentlyPlaying: activeGuild.currentlyPlaying,
+      queue: activeGuild.queue,
+    };
   }
 
   @Authorized()
@@ -96,24 +109,22 @@ export class GuildResolver {
   @Authorized()
   @Subscription(() => Guild, {
     topics: "GUILD_UPDATED",
-    filter: ({ payload, args }) => payload.guildInfo.id === args.guildId,
+    filter: ({ payload, args, context }) =>
+      payload === args.guildId && context.user?.guilds.some((g: GuildData) => g.id === payload),
   })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async guildUpdated(@Root() guild: ActiveGuild, @Arg("guildId") guildId: Snowflake): Promise<Guild> {
-    return this.activeGuildToGuild(guild);
+  async guildUpdated(@Ctx() context: Context, @Arg("guildId") guildId: Snowflake): Promise<Guild> {
+    const guildData = context.user?.guilds.find((g) => g.id === guildId);
+    if (guildData == null) {
+      throw new Error(`No guild with guildId : ${guildId}`);
+    }
+    return this.guildDataToGuild(guildData);
   }
 
-  private activeGuildToGuild(activeGuild: ActiveGuild): Guild {
+  private guildDataToGuild(guildData: GuildData): Guild {
     return {
-      id: activeGuild.guildInfo.id,
-      name: activeGuild.guildInfo.name,
-      icon: activeGuild.guildInfo.icon,
-      currentlyPlaying: activeGuild.currentlyPlaying,
-      playbackStatus: {
-        isPlaying: activeGuild.audioPlayer?.state.status === AudioPlayerStatus.Playing,
-        currentTime: Math.round((activeGuild.audioResource?.playbackDuration ?? 0) / 1000),
-      },
-      queue: activeGuild.queue,
+      id: guildData.id,
+      name: guildData.name,
+      icon: guildData.icon == null ? undefined : `https://cdn.discordapp.com/icons/${guildData.id}/${guildData.icon}`,
     };
   }
 }

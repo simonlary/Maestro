@@ -92,7 +92,7 @@ export class Bot {
 
     const song = guild.queue.splice(songIndex, 1)[0];
     logger.info(`Removed queued song "${song.title}" in guild "${guild.guildInfo.name}"`);
-    this.guildUpdated(guild);
+    this.guildUpdated(guild.guildInfo.id);
 
     return song;
   }
@@ -114,7 +114,7 @@ export class Bot {
 
     activeGuild.queue.push(song);
     logger.info(`Queued song "${song.title}" in guild "${activeGuild.guildInfo.name}"`);
-    this.guildUpdated(activeGuild);
+    this.guildUpdated(activeGuild.guildInfo.id);
 
     return song;
   }
@@ -124,8 +124,8 @@ export class Bot {
     this.client.destroy();
   }
 
-  private guildUpdated(activeGuild: ActiveGuild) {
-    this.pubSub.publish("GUILD_UPDATED", activeGuild);
+  private guildUpdated(guildId: Snowflake) {
+    this.pubSub.publish("GUILD_UPDATED", guildId);
   }
 
   private onInteractionCreate = async (interaction: Interaction) => {
@@ -246,10 +246,10 @@ export class Bot {
       this.activeGuilds.set(guildId, newActiveGuild);
       await entersState(voiceConnection, VoiceConnectionStatus.Ready, 5_000);
       await this.playNext(newActiveGuild);
-      this.guildUpdated(newActiveGuild);
+      this.guildUpdated(newActiveGuild.guildInfo.id);
     } else {
       activeGuild.queue.push(song);
-      this.guildUpdated(activeGuild);
+      this.guildUpdated(activeGuild.guildInfo.id);
     }
 
     const embed = new MessageEmbed()
@@ -267,7 +267,7 @@ export class Bot {
     activeGuild.audioPlayer.play(activeGuild.audioResource);
     activeGuild.voiceConnection.subscribe(activeGuild.audioPlayer);
 
-    activeGuild.audioPlayer.on("stateChange", () => this.guildUpdated(activeGuild));
+    activeGuild.audioPlayer.on("stateChange", () => this.guildUpdated(activeGuild.guildInfo.id));
     activeGuild.audioPlayer.once(AudioPlayerStatus.Idle, () => {
       const nextSong = activeGuild.queue.shift();
       if (nextSong == null) {
