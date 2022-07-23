@@ -1,8 +1,8 @@
 import { Snowflake } from "discord.js";
-import { logger } from "./logger.js";
 import fetch from "node-fetch";
+import { Cache } from "./utils/cache.js";
 
-interface UserData {
+export interface UserData {
   id: Snowflake;
   username: string;
   avatar: string;
@@ -15,7 +15,13 @@ interface UserData {
   mfa_enabled?: boolean;
 }
 
+const userDataCache = new Cache(fetchUserData);
+
 export async function getUserData(accessToken: string) {
+  return userDataCache.get(accessToken);
+}
+
+async function fetchUserData(accessToken: string) {
   const response = await fetch("https://discordapp.com/api/v9/users/@me", {
     method: "get",
     headers: {
@@ -23,17 +29,14 @@ export async function getUserData(accessToken: string) {
     },
   });
 
-  if (!response.ok) {
-    logger.error(`Error getting user data (${response.status}) : ${await response.text()}`);
-    throw new Error("Error getting user data.");
+  if (response.ok) {
+    return (await response.json()) as UserData;
   }
 
-  const data = (await response.json()) as UserData;
-
-  return data;
+  return undefined;
 }
 
-interface GuildData {
+export interface GuildData {
   id: Snowflake;
   name: string;
   icon: string | null;
@@ -42,7 +45,13 @@ interface GuildData {
   features: string[];
 }
 
+const guildsDataCache = new Cache(fetchGuildsData);
+
 export async function getGuildsData(accessToken: string) {
+  return guildsDataCache.get(accessToken);
+}
+
+async function fetchGuildsData(accessToken: string) {
   const response = await fetch("https://discordapp.com/api/v9/users/@me/guilds", {
     method: "get",
     headers: {
@@ -50,12 +59,9 @@ export async function getGuildsData(accessToken: string) {
     },
   });
 
-  if (!response.ok) {
-    logger.error(`Error getting guilds data (${response.status}) : ${await response.text()}`);
-    throw new Error("Error getting guilds data.");
+  if (response.ok) {
+    return (await response.json()) as GuildData[];
   }
 
-  const data = (await response.json()) as GuildData[];
-
-  return data;
+  return undefined;
 }
