@@ -7,8 +7,8 @@ export class Cache<Key, Value> {
   private readonly cache = new Map<Key, ValueWrapper<Value>>();
 
   public constructor(
-    private readonly _fetchValue: (key: Key) => Promise<Value | undefined>,
-    private readonly _validDelayInMs = 30_000
+    private readonly _fetchValue: (key: Key) => Promise<Value>,
+    private readonly _validDelayInMs = 60_000
   ) {
     setInterval(() => {
       const toDelete = [...this.cache.entries()].filter(([, v]) => v.expiration < Date.now());
@@ -26,10 +26,7 @@ export class Cache<Key, Value> {
     }
 
     const value = await this._fetchValue(key);
-
-    if (value != null) {
-      this.cache.set(key, { value, expiration: Date.now() + this._validDelayInMs });
-    }
+    this.cache.set(key, { value, expiration: Date.now() + this._validDelayInMs });
 
     return value;
   }
