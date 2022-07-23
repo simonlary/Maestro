@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 interface GuildInfo {
   id: string;
   name: string;
-  icon: string;
+  icon?: string | null;
 }
 
 function GuildEntry({ guild }: { guild: GuildInfo }) {
+  const icon = guild.icon ?? "https://cdn.discordapp.com/embed/avatars/0.png";
   return (
     <NavLink
       to={guild.id}
@@ -17,7 +18,7 @@ function GuildEntry({ guild }: { guild: GuildInfo }) {
       }
     >
       <div className="rounded-full h-full overflow-hidden">
-        <img src={guild.icon} alt="Guild icon" className="h-full object-cover" />
+        <img src={icon} alt="Guild icon" className="h-full object-cover" />
       </div>
       <div className="flex-1 font-semibold truncate pl-2 hidden lg:block">{guild.name}</div>
     </NavLink>

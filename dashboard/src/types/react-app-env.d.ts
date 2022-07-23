@@ -7,7 +7,6 @@ declare module "*.mp3" {
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    readonly REACT_APP_DASHBOARD_TOKEN?: string;
     readonly REACT_APP_BOT_URL?: string;
   }
 }

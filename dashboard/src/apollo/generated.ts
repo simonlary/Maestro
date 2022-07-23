@@ -18,12 +18,10 @@ export type Scalars = {
 
 export type Guild = {
   __typename?: 'Guild';
-  currentlyPlaying: Song;
-  icon: Scalars['String'];
+  icon?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
-  playbackStatus: PlaybackStatus;
-  queue: Array<Song>;
+  playbackStatus?: Maybe<PlaybackStatus>;
 };
 
 export type Log = {
@@ -75,7 +73,9 @@ export type MutationSkipArgs = {
 export type PlaybackStatus = {
   __typename?: 'PlaybackStatus';
   currentTime: Scalars['Int'];
+  currentlyPlaying: Song;
   isPlaying: Scalars['Boolean'];
+  queue: Array<Song>;
 };
 
 export type Query = {
@@ -129,14 +129,14 @@ export type SubscriptionGuildUpdatedArgs = {
 export type GuildsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GuildsQuery = { __typename?: 'Query', guilds: Array<{ __typename?: 'Guild', id: string, name: string, icon: string }> };
+export type GuildsQuery = { __typename?: 'Query', guilds: Array<{ __typename?: 'Guild', id: string, name: string, icon?: string | null, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean } | null }> };
 
 export type GuildQueryVariables = Exact<{
   guildId: Scalars['String'];
 }>;
 
 
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
 
 export type LogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -209,7 +209,7 @@ export type GuildUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
 
 
 export const GuildsDocument = gql`
@@ -218,6 +218,9 @@ export const GuildsDocument = gql`
     id
     name
     icon
+    playbackStatus {
+      isPlaying
+    }
   }
 }
     `;
@@ -252,23 +255,23 @@ export const GuildDocument = gql`
     query guild($guildId: String!) {
   guild(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }
@@ -633,23 +636,23 @@ export const GuildUpdatedDocument = gql`
     subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }

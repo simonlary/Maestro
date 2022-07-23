@@ -5,18 +5,18 @@ import { createClient } from "graphql-ws";
 
 const isProduction = process.env.NODE_ENV === "production";
 const BOT_URL = isProduction ? window.BOT_URL : process.env.REACT_APP_BOT_URL;
-const DASHBOARD_TOKEN = isProduction ? window.DASHBOARD_TOKEN : process.env.REACT_APP_DASHBOARD_TOKEN;
 
 export function createApolloClient() {
   const httpLink = new HttpLink({
     uri: `http://${BOT_URL}`,
   });
 
+  const token = localStorage.getItem("accessToken");
   const wsLink = new GraphQLWsLink(
     createClient({
       url: `ws://${BOT_URL}`,
       connectionParams: {
-        authorization: DASHBOARD_TOKEN,
+        authorization: token,
       },
     })
   );
@@ -31,7 +31,8 @@ export function createApolloClient() {
   );
 
   const httpAuth = new ApolloLink((operation, forward) => {
-    operation.setContext({ headers: { authorization: DASHBOARD_TOKEN } });
+    const token = localStorage.getItem("accessToken");
+    operation.setContext({ headers: { authorization: token } });
     return forward(operation);
   });
 
