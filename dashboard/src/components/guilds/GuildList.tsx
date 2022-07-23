@@ -32,9 +32,6 @@ export function GuildList({ guilds }: { guilds: GuildInfo[] }) {
           <GuildEntry key={guild.id} guild={guild} />
         ))}
       </div>
-      {/* <div className="p-4 text-center bg-gray-1">
-        <Button text="Add" size="md" variant="normal" className="w-20 lg:w-36" />
-      </div> */}
     </div>
   );
 }
