@@ -4,6 +4,7 @@ export class Config {
   private readonly _token: string;
   private readonly _adminUsers: string[];
   private readonly _debugGuilds: string[];
+  private readonly _dashboardUrl: string;
 
   public constructor() {
     const token = process.env.TOKEN;
@@ -11,6 +12,7 @@ export class Config {
     this._token = token;
     this._adminUsers = process.env.ADMIN_USERS?.split(",") ?? [];
     this._debugGuilds = process.env.DEBUG_GUILDS?.split(",") ?? [];
+    this._dashboardUrl = process.env.DASHBOARD_URL ?? "";
   }
 
   public get token(): string {
@@ -23,5 +25,9 @@ export class Config {
 
   public get debugGuilds(): string[] {
     return this._debugGuilds;
+  }
+
+  public get dashboardUrl(): string {
+    return this._dashboardUrl;
   }
 }

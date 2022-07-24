@@ -1,4 +1,13 @@
-import { Client, CommandInteraction, Intents, Interaction, MessageEmbed, Snowflake } from "discord.js";
+import {
+  Client,
+  CommandInteraction,
+  Intents,
+  Interaction,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
+  Snowflake,
+} from "discord.js";
 import {
   AudioPlayer,
   AudioPlayerStatus,
@@ -163,6 +172,9 @@ export class Bot {
           break;
         case "queue":
           await this.queue(interaction);
+          break;
+        case "dashboard":
+          await this.dashboard(interaction);
           break;
         default:
           logger.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
@@ -385,5 +397,9 @@ export class Bot {
       embed.addField("Queue", activeGuild.queue.map((s, i) => `${i + 1}. [${s.title}](${s.url})`).join("\n"));
     }
     await interaction.reply({ embeds: [embed], ephemeral: true });
+  };
+
+  private dashboard = async (interaction: CommandInteraction) => {
+    await interaction.reply({ content: this.config.dashboardUrl, ephemeral: true });
   };
 }
