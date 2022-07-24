@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 interface GuildInfo {
@@ -7,8 +8,26 @@ interface GuildInfo {
   isPlaying: boolean;
 }
 
+function useIcons(guild: GuildInfo) {
+  if (guild.icon == null) {
+    return {
+      static: "https://cdn.discordapp.com/embed/avatars/0.png",
+      animated: "https://cdn.discordapp.com/embed/avatars/0.png",
+    };
+  }
+
+  return {
+    static: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`,
+    animated: guild.icon.startsWith("a_")
+      ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.gif`
+      : `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`,
+  };
+}
+
 function GuildEntry({ guild }: { guild: GuildInfo }) {
-  const icon = guild.icon ?? "https://cdn.discordapp.com/embed/avatars/0.png";
+  const icons = useIcons(guild);
+  const [icon, setIcon] = useState(icons.static);
+
   return (
     <NavLink
       to={guild.id}
@@ -17,6 +36,8 @@ function GuildEntry({ guild }: { guild: GuildInfo }) {
           isActive ? "bg-selected" : "hover:bg-hover"
         }`
       }
+      onMouseEnter={() => setIcon(icons.animated)}
+      onMouseLeave={() => setIcon(icons.static)}
     >
       <div className="rounded-full h-full overflow-hidden">
         <img src={icon} alt="Guild icon" className="h-full object-cover" />

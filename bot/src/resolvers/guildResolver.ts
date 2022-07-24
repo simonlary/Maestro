@@ -124,7 +124,7 @@ export class GuildResolver {
     return {
       id: guildData.id,
       name: guildData.name,
-      icon: guildData.icon == null ? undefined : `https://cdn.discordapp.com/icons/${guildData.id}/${guildData.icon}`,
+      icon: guildData.icon ?? undefined,
     };
   }
 }
