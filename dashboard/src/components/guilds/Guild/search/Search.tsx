@@ -18,7 +18,7 @@ export function Search({ guildId }: { guildId: string }) {
   }
 
   return (
-    <div className="h-full bg-gray-3 rounded-tl-md">
+    <div className="h-full bg-gray-3">
       <div className="flex flex-col h-full">
         <div className="px-4 py-2">
           <form className="flex w-full h-11 bg-gray-2 rounded items-center overflow-hidden" onSubmit={submit}>

@@ -14,7 +14,7 @@ export function Queue({ currentSong, queue, guildId }: { currentSong: Song; queu
   }
 
   return (
-    <div className="bg-gray-3 rounded-tr-md h-full">
+    <div className="bg-gray-3 h-full">
       <div className="flex flex-col h-full">
         <div className="flex font-semibold py-2">
           <span className="flex-none w-11 px-1 text-right">#</span>

@@ -25,12 +25,12 @@ export function ActiveGuildPage({ guildId, playbackStatus }: ActiveGuildPageProp
   }, [playbackStatus]);
 
   return (
-    <div className="w-full h-full flex flex-col bg-gray-1">
-      <div className="flex-1 relative h-full overflow-hidden rounded-tl-md">
-        <div className="absolute left-0 top-0 bottom-0 w-1/2 pr-1">
+    <div className="w-full h-full flex flex-col bg-gray-2">
+      <div className="flex-1 relative h-full overflow-hidden">
+        <div className="absolute left-0 top-0 bottom-0 w-1/2 pr-0.5">
           <Queue currentSong={playbackStatus.currentlyPlaying} queue={playbackStatus.queue} guildId={guildId} />
         </div>
-        <div className="absolute right-0 top-0 bottom-0 w-1/2 pl-1">
+        <div className="absolute right-0 top-0 bottom-0 w-1/2 pl-0.5">
           <Search guildId={guildId} />
         </div>
       </div>
