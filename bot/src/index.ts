@@ -17,6 +17,7 @@ import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
 import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentification.js";
+import { UserResolver } from "./resolvers/userResolver.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,7 +32,7 @@ const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [GuildResolver, LogResolver, SettingsResolver, SongResolver],
+  resolvers: [GuildResolver, LogResolver, SettingsResolver, SongResolver, UserResolver],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
   authChecker,

@@ -5,7 +5,7 @@ import { Cache } from "./utils/cache.js";
 export interface UserData {
   id: Snowflake;
   username: string;
-  avatar: string;
+  avatar: string | null;
   discriminator: string;
   public_flags?: number;
   flags?: number;

@@ -48,6 +48,12 @@ query settings {
   }
 }
 
+query user {
+  user {
+    isAdmin
+  }
+}
+
 query searchSongs($query: String!) {
   searchSongs(query: $query) {
     id
