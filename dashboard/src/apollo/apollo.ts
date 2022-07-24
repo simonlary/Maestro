@@ -2,21 +2,18 @@ import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, split } from "@apoll
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
-
-const isProduction = process.env.NODE_ENV === "production";
-const BOT_URL = isProduction ? window.BOT_URL : process.env.REACT_APP_BOT_URL;
+import { config } from "../config";
 
 export function createApolloClient() {
   const httpLink = new HttpLink({
-    uri: `http://${BOT_URL}`,
+    uri: config.httpBotUrl,
   });
 
-  const token = localStorage.getItem("accessToken");
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: `ws://${BOT_URL}`,
+      url: config.wsBotUrl,
       connectionParams: {
-        authorization: token,
+        authorization: config.accessToken,
       },
     })
   );
@@ -31,8 +28,7 @@ export function createApolloClient() {
   );
 
   const httpAuth = new ApolloLink((operation, forward) => {
-    const token = localStorage.getItem("accessToken");
-    operation.setContext({ headers: { authorization: token } });
+    operation.setContext({ headers: { authorization: config.accessToken } });
     return forward(operation);
   });
 

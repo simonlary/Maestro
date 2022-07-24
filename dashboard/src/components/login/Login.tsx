@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { config } from "../../config";
 
 export function Login() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export function Login() {
     const params = new URLSearchParams(hash.slice(1));
     const accessToken = params.get("access_token");
     if (accessToken != null) {
-      localStorage.setItem("accessToken", accessToken);
+      config.setAccessToken(accessToken);
       navigate("/");
     }
   }, [hash]);

@@ -1,8 +1,7 @@
 import { NavLink } from "react-router-dom";
+import { config } from "../config";
 import { Button } from "./controls/Button";
 import headerIcon from "./header-icon.svg";
-
-const CLIENT_ID = "283320553136193539";
 
 export function AppBar() {
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
@@ -11,7 +10,7 @@ export function AppBar() {
   function login() {
     const redirectUrl = encodeURIComponent(`${window.location.origin}/login`);
     window.location.assign(
-      `https://discordapp.com/api/oauth2/authorize?client_id=${CLIENT_ID}&response_type=token&scope=identify%20guilds&redirect_uri=${redirectUrl}`
+      `https://discordapp.com/api/oauth2/authorize?client_id=${config.clientId}&response_type=token&scope=identify%20guilds&redirect_uri=${redirectUrl}`
     );
   }
 
