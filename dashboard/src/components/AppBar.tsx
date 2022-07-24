@@ -1,13 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { useUserQuery } from "../apollo/generated";
 import { Button } from "./controls/Button";
 import headerIcon from "./header-icon.svg";
 
 const CLIENT_ID = "283320553136193539";
 
 export function AppBar() {
-  const { data } = useUserQuery();
-
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center p-2 h-full hover:bg-gray-2 font-bold ${isActive ? "text-white" : "text-soft-white"}`;
 
@@ -27,16 +24,12 @@ export function AppBar() {
           <NavLink to="/guilds" className={getNavClass}>
             Guilds
           </NavLink>
-          {data?.user.isAdmin && (
-            <NavLink to="/logs" className={getNavClass}>
-              Logs
-            </NavLink>
-          )}
-          {data?.user.isAdmin && (
-            <NavLink to="/settings" className={getNavClass}>
-              Settings
-            </NavLink>
-          )}
+          <NavLink to="/logs" className={getNavClass}>
+            Logs
+          </NavLink>
+          <NavLink to="/settings" className={getNavClass}>
+            Settings
+          </NavLink>
         </div>
       </div>
       <Button text="Login with Discord" className="m-1" onClick={login} />
