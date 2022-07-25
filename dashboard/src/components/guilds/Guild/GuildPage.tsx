@@ -40,7 +40,9 @@ export function GuildPage() {
   return (
     <div className="flex items-center justify-center h-full w-full bg-gray-3">
       {loading || data?.guild == null ? (
-        <Spinner />
+        <div className="flex items-center justify-center h-full">
+          <Spinner className="w-20" />
+        </div>
       ) : data.guild.playbackStatus == null ? (
         <NoGuildPage />
       ) : (

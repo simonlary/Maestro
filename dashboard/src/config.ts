@@ -33,13 +33,14 @@ const config = new (class {
     return this._accessToken;
   }
 
-  public setAccessToken(newAccessToken: string | null) {
-    if (newAccessToken == null) {
-      localStorage.removeItem(ACCESS_TOKEN_KEY);
-    } else {
-      localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
-    }
+  public setAccessToken(newAccessToken: string) {
     this._accessToken = newAccessToken;
+    localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken);
+  }
+
+  public clearAccessToken() {
+    this._accessToken = null;
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
   }
 })();
 

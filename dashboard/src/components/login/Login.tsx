@@ -1,19 +1,20 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { config } from "../../config";
+import { Button } from "../controls/Button";
 
 export function Login() {
-  const navigate = useNavigate();
-  const { hash } = useLocation();
+  function login() {
+    const redirectUrl = encodeURIComponent(`${window.location.origin}/login_callback`);
+    window.location.assign(
+      `https://discordapp.com/api/oauth2/authorize?client_id=${config.clientId}&response_type=token&scope=identify%20guilds&redirect_uri=${redirectUrl}`
+    );
+  }
 
-  useEffect(() => {
-    const params = new URLSearchParams(hash.slice(1));
-    const accessToken = params.get("access_token");
-    if (accessToken != null) {
-      config.setAccessToken(accessToken);
-      navigate("/");
-    }
-  }, [hash]);
-
-  return <div>Login</div>;
+  return config.accessToken == null ? (
+    <div className="flex items-center justify-center h-full">
+      <Button text="Login with Discord" onClick={login} />
+    </div>
+  ) : (
+    <Navigate to="/guilds" />
+  );
 }
