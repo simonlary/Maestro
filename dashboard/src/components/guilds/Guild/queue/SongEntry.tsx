@@ -38,7 +38,12 @@ export function SongEntry(props: SongEntryProps) {
       </div>
 
       {/* Youtube Link */}
-      <a className="items-center text-red hidden md:block" href={props.song.url} target="_blank" rel="noopener noreferrer">
+      <a
+        className="items-center text-red hidden md:block"
+        href={props.song.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <RiYoutubeFill className="cursor-pointer" />
       </a>
 
@@ -47,9 +52,7 @@ export function SongEntry(props: SongEntryProps) {
 
       {/* Remove Button */}
       <span
-        className={`pr-2 text-right text-lg invisible hover:cursor-pointer ${
-          props.isPlaying ? "" : "group-hover:visible"
-        }`}
+        className="pr-2 text-right text-lg invisible hover:cursor-pointer group-hover:visible"
         onClick={() => props.onRemove()}
       >
         <RiCloseCircleLine />

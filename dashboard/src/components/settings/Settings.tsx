@@ -25,26 +25,18 @@ export function Settings() {
           <div className="flex flex-col gap-2">
             <h1>Register commands</h1>
             <div>This buttons registers the bot&apos;s commands. This is rate-limited by discord.</div>
-            <Button
-              text={disableRegisterButton ? "Already registered" : "Register"}
-              size="md"
-              className="w-44 mt-2"
-              onClick={onRegisterCommandsClick}
-              disabled={disableRegisterButton}
-            />
+            <Button size="md" className="w-44 mt-2" onClick={onRegisterCommandsClick} disabled={disableRegisterButton}>
+              {disableRegisterButton ? "Already registered" : "Register"}
+            </Button>
           </div>
         </SettingsCard>
         <SettingsCard>
           <div className="flex flex-col gap-2">
             <h1>Restart bot</h1>
             <div>This button will restart the bot. Any media being played will stop.</div>
-            <Button
-              text="Restart"
-              size="md"
-              variant="destructive"
-              className="w-44 mt-2"
-              onClick={() => restartCommand()}
-            />
+            <Button size="md" variant="destructive" className="w-44 mt-2" onClick={() => restartCommand()}>
+              Restart
+            </Button>
           </div>
         </SettingsCard>
       </div>

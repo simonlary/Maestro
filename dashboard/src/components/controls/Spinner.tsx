@@ -1,11 +1,9 @@
 export function Spinner({ className, ...rest }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      className={`animate-spin ${className}`}
+      className={`animate-spin w-10 ${className}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
-      width="1.75em"
-      height="1.75em"
       viewBox="0 0 24 24"
       {...rest}
     >

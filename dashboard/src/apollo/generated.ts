@@ -18,12 +18,10 @@ export type Scalars = {
 
 export type Guild = {
   __typename?: 'Guild';
-  currentlyPlaying: Song;
-  icon: Scalars['String'];
+  icon?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
-  playbackStatus: PlaybackStatus;
-  queue: Array<Song>;
+  playbackStatus?: Maybe<PlaybackStatus>;
 };
 
 export type Log = {
@@ -75,7 +73,9 @@ export type MutationSkipArgs = {
 export type PlaybackStatus = {
   __typename?: 'PlaybackStatus';
   currentTime: Scalars['Int'];
+  currentlyPlaying: Song;
   isPlaying: Scalars['Boolean'];
+  queue: Array<Song>;
 };
 
 export type Query = {
@@ -85,6 +85,7 @@ export type Query = {
   logs: Array<Log>;
   searchSongs: Array<Song>;
   settings: Settings;
+  user: User;
 };
 
 
@@ -126,17 +127,25 @@ export type SubscriptionGuildUpdatedArgs = {
   guildId: Scalars['String'];
 };
 
+export type User = {
+  __typename?: 'User';
+  icon: Scalars['String'];
+  id: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
+  username: Scalars['String'];
+};
+
 export type GuildsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GuildsQuery = { __typename?: 'Query', guilds: Array<{ __typename?: 'Guild', id: string, name: string, icon: string }> };
+export type GuildsQuery = { __typename?: 'Query', guilds: Array<{ __typename?: 'Guild', id: string, name: string, icon?: string | null, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean } | null }> };
 
 export type GuildQueryVariables = Exact<{
   guildId: Scalars['String'];
 }>;
 
 
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
 
 export type LogsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
@@ -149,6 +158,11 @@ export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SettingsQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', hasAlreadyRegisteredCommands: boolean } };
+
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', isAdmin: boolean } };
 
 export type SearchSongsQueryVariables = Exact<{
   query: Scalars['String'];
@@ -209,7 +223,7 @@ export type GuildUpdatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, playbackStatus: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } };
+export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
 
 
 export const GuildsDocument = gql`
@@ -218,6 +232,9 @@ export const GuildsDocument = gql`
     id
     name
     icon
+    playbackStatus {
+      isPlaying
+    }
   }
 }
     `;
@@ -252,23 +269,23 @@ export const GuildDocument = gql`
     query guild($guildId: String!) {
   guild(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }
@@ -373,6 +390,40 @@ export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<S
 export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
 export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
 export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
+export const UserDocument = gql`
+    query user {
+  user {
+    isAdmin
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const SearchSongsDocument = gql`
     query searchSongs($query: String!) {
   searchSongs(query: $query) {
@@ -633,23 +684,23 @@ export const GuildUpdatedDocument = gql`
     subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }

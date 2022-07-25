@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
+import { Song } from "./song.js";
 
 @ObjectType()
 export class PlaybackStatus {
@@ -7,4 +8,10 @@ export class PlaybackStatus {
 
   @Field(() => Int)
   currentTime!: number;
+
+  @Field()
+  currentlyPlaying!: Song;
+
+  @Field(() => [Song])
+  queue!: Song[];
 }

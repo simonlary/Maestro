@@ -1,6 +1,5 @@
 import { Snowflake } from "discord.js";
 import { Field, ObjectType } from "type-graphql";
-import { Song } from "./song.js";
 import { PlaybackStatus } from "./playbackStatus.js";
 
 @ObjectType()
@@ -11,15 +10,9 @@ export class Guild {
   @Field()
   name!: string;
 
-  @Field()
+  @Field({ nullable: true })
   icon?: string;
 
-  @Field()
-  currentlyPlaying!: Song;
-
-  @Field()
-  playbackStatus!: PlaybackStatus;
-
-  @Field(() => [Song])
-  queue!: Song[];
+  @Field({ nullable: true })
+  playbackStatus?: PlaybackStatus;
 }
