@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -17,69 +17,64 @@ export type Scalars = {
 };
 
 export type Guild = {
-  __typename?: 'Guild';
-  icon?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  name: Scalars['String'];
+  __typename?: "Guild";
+  icon?: Maybe<Scalars["String"]>;
+  id: Scalars["String"];
+  name: Scalars["String"];
   playbackStatus?: Maybe<PlaybackStatus>;
 };
 
 export type Log = {
-  __typename?: 'Log';
-  id: Scalars['Int'];
-  level: Scalars['LogLevel'];
-  message: Scalars['String'];
-  timestamp: Scalars['String'];
+  __typename?: "Log";
+  id: Scalars["Int"];
+  level: Scalars["LogLevel"];
+  message: Scalars["String"];
+  timestamp: Scalars["String"];
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  pause: Scalars['Boolean'];
-  queueSong: Scalars['String'];
-  registerCommands: Scalars['Boolean'];
-  removeQueuedSong: Scalars['String'];
-  restart: Scalars['Boolean'];
-  resume: Scalars['Boolean'];
-  skip: Scalars['Boolean'];
+  __typename?: "Mutation";
+  pause: Scalars["Boolean"];
+  queueSong: Scalars["String"];
+  registerCommands: Scalars["Boolean"];
+  removeQueuedSong: Scalars["String"];
+  restart: Scalars["Boolean"];
+  resume: Scalars["Boolean"];
+  skip: Scalars["Boolean"];
 };
-
 
 export type MutationPauseArgs = {
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 };
-
 
 export type MutationQueueSongArgs = {
-  guildId: Scalars['String'];
-  songUrl: Scalars['String'];
+  guildId: Scalars["String"];
+  songUrl: Scalars["String"];
 };
-
 
 export type MutationRemoveQueuedSongArgs = {
-  guildId: Scalars['String'];
-  songId: Scalars['String'];
+  guildId: Scalars["String"];
+  songId: Scalars["String"];
 };
-
 
 export type MutationResumeArgs = {
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 };
 
-
 export type MutationSkipArgs = {
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 };
 
 export type PlaybackStatus = {
-  __typename?: 'PlaybackStatus';
-  currentTime: Scalars['Int'];
+  __typename?: "PlaybackStatus";
+  currentTime: Scalars["Int"];
   currentlyPlaying: Song;
-  isPlaying: Scalars['Boolean'];
+  isPlaying: Scalars["Boolean"];
   queue: Array<Song>;
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   guild: Guild;
   guilds: Array<Guild>;
   logs: Array<Log>;
@@ -88,156 +83,222 @@ export type Query = {
   user: User;
 };
 
-
 export type QueryGuildArgs = {
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 };
-
 
 export type QueryLogsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars["Int"]>;
 };
 
-
 export type QuerySearchSongsArgs = {
-  query: Scalars['String'];
+  query: Scalars["String"];
 };
 
 export type Settings = {
-  __typename?: 'Settings';
-  hasAlreadyRegisteredCommands: Scalars['Boolean'];
+  __typename?: "Settings";
+  hasAlreadyRegisteredCommands: Scalars["Boolean"];
 };
 
 export type Song = {
-  __typename?: 'Song';
-  duration: Scalars['Int'];
-  id: Scalars['String'];
-  thumbnail: Scalars['String'];
-  title: Scalars['String'];
-  url: Scalars['String'];
+  __typename?: "Song";
+  duration: Scalars["Int"];
+  id: Scalars["String"];
+  thumbnail: Scalars["String"];
+  title: Scalars["String"];
+  url: Scalars["String"];
 };
 
 export type Subscription = {
-  __typename?: 'Subscription';
+  __typename?: "Subscription";
   guildUpdated: Guild;
 };
 
-
 export type SubscriptionGuildUpdatedArgs = {
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 };
 
 export type User = {
-  __typename?: 'User';
-  icon: Scalars['String'];
-  id: Scalars['String'];
-  isAdmin: Scalars['Boolean'];
-  username: Scalars['String'];
+  __typename?: "User";
+  icon: Scalars["String"];
+  id: Scalars["String"];
+  isAdmin: Scalars["Boolean"];
+  username: Scalars["String"];
 };
 
-export type GuildsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GuildsQueryVariables = Exact<{ [key: string]: never }>;
 
-
-export type GuildsQuery = { __typename?: 'Query', guilds: Array<{ __typename?: 'Guild', id: string, name: string, icon?: string | null, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean } | null }> };
+export type GuildsQuery = {
+  __typename?: "Query";
+  guilds: Array<{
+    __typename?: "Guild";
+    id: string;
+    name: string;
+    icon?: string | null;
+    playbackStatus?: { __typename?: "PlaybackStatus"; isPlaying: boolean } | null;
+  }>;
+};
 
 export type GuildQueryVariables = Exact<{
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 }>;
 
-
-export type GuildQuery = { __typename?: 'Query', guild: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
+export type GuildQuery = {
+  __typename?: "Query";
+  guild: {
+    __typename?: "Guild";
+    id: string;
+    playbackStatus?: {
+      __typename?: "PlaybackStatus";
+      isPlaying: boolean;
+      currentTime: number;
+      currentlyPlaying: {
+        __typename?: "Song";
+        id: string;
+        title: string;
+        url: string;
+        thumbnail: string;
+        duration: number;
+      };
+      queue: Array<{
+        __typename?: "Song";
+        id: string;
+        title: string;
+        url: string;
+        thumbnail: string;
+        duration: number;
+      }>;
+    } | null;
+  };
+};
 
 export type LogsQueryVariables = Exact<{
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars["Int"]>;
 }>;
 
+export type LogsQuery = {
+  __typename?: "Query";
+  logs: Array<{
+    __typename?: "Log";
+    id: number;
+    timestamp: string;
+    level: "info" | "warning" | "error";
+    message: string;
+  }>;
+};
 
-export type LogsQuery = { __typename?: 'Query', logs: Array<{ __typename?: 'Log', id: number, timestamp: string, level: "info" | "warning" | "error", message: string }> };
+export type SettingsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
+export type SettingsQuery = {
+  __typename?: "Query";
+  settings: { __typename?: "Settings"; hasAlreadyRegisteredCommands: boolean };
+};
 
+export type UserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type SettingsQuery = { __typename?: 'Query', settings: { __typename?: 'Settings', hasAlreadyRegisteredCommands: boolean } };
-
-export type UserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', isAdmin: boolean } };
+export type UserQuery = { __typename?: "Query"; user: { __typename?: "User"; isAdmin: boolean } };
 
 export type SearchSongsQueryVariables = Exact<{
-  query: Scalars['String'];
+  query: Scalars["String"];
 }>;
 
+export type SearchSongsQuery = {
+  __typename?: "Query";
+  searchSongs: Array<{
+    __typename?: "Song";
+    id: string;
+    title: string;
+    url: string;
+    thumbnail: string;
+    duration: number;
+  }>;
+};
 
-export type SearchSongsQuery = { __typename?: 'Query', searchSongs: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> };
+export type RegisterCommandsMutationVariables = Exact<{ [key: string]: never }>;
 
-export type RegisterCommandsMutationVariables = Exact<{ [key: string]: never; }>;
+export type RegisterCommandsMutation = { __typename?: "Mutation"; registerCommands: boolean };
 
+export type RestartMutationVariables = Exact<{ [key: string]: never }>;
 
-export type RegisterCommandsMutation = { __typename?: 'Mutation', registerCommands: boolean };
-
-export type RestartMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type RestartMutation = { __typename?: 'Mutation', restart: boolean };
+export type RestartMutation = { __typename?: "Mutation"; restart: boolean };
 
 export type ResumeMutationVariables = Exact<{
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 }>;
 
-
-export type ResumeMutation = { __typename?: 'Mutation', resume: boolean };
+export type ResumeMutation = { __typename?: "Mutation"; resume: boolean };
 
 export type PauseMutationVariables = Exact<{
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 }>;
 
-
-export type PauseMutation = { __typename?: 'Mutation', pause: boolean };
+export type PauseMutation = { __typename?: "Mutation"; pause: boolean };
 
 export type SkipMutationVariables = Exact<{
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 }>;
 
-
-export type SkipMutation = { __typename?: 'Mutation', skip: boolean };
+export type SkipMutation = { __typename?: "Mutation"; skip: boolean };
 
 export type RemoveQueuedSongMutationVariables = Exact<{
-  guildId: Scalars['String'];
-  songId: Scalars['String'];
+  guildId: Scalars["String"];
+  songId: Scalars["String"];
 }>;
 
-
-export type RemoveQueuedSongMutation = { __typename?: 'Mutation', removeQueuedSong: string };
+export type RemoveQueuedSongMutation = { __typename?: "Mutation"; removeQueuedSong: string };
 
 export type QueueSongMutationVariables = Exact<{
-  guildId: Scalars['String'];
-  songUrl: Scalars['String'];
+  guildId: Scalars["String"];
+  songUrl: Scalars["String"];
 }>;
 
-
-export type QueueSongMutation = { __typename?: 'Mutation', queueSong: string };
+export type QueueSongMutation = { __typename?: "Mutation"; queueSong: string };
 
 export type GuildUpdatedSubscriptionVariables = Exact<{
-  guildId: Scalars['String'];
+  guildId: Scalars["String"];
 }>;
 
-
-export type GuildUpdatedSubscription = { __typename?: 'Subscription', guildUpdated: { __typename?: 'Guild', id: string, playbackStatus?: { __typename?: 'PlaybackStatus', isPlaying: boolean, currentTime: number, currentlyPlaying: { __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }, queue: Array<{ __typename?: 'Song', id: string, title: string, url: string, thumbnail: string, duration: number }> } | null } };
-
+export type GuildUpdatedSubscription = {
+  __typename?: "Subscription";
+  guildUpdated: {
+    __typename?: "Guild";
+    id: string;
+    playbackStatus?: {
+      __typename?: "PlaybackStatus";
+      isPlaying: boolean;
+      currentTime: number;
+      currentlyPlaying: {
+        __typename?: "Song";
+        id: string;
+        title: string;
+        url: string;
+        thumbnail: string;
+        duration: number;
+      };
+      queue: Array<{
+        __typename?: "Song";
+        id: string;
+        title: string;
+        url: string;
+        thumbnail: string;
+        duration: number;
+      }>;
+    } | null;
+  };
+};
 
 export const GuildsDocument = gql`
-    query guilds {
-  guilds {
-    id
-    name
-    icon
-    playbackStatus {
-      isPlaying
+  query guilds {
+    guilds {
+      id
+      name
+      icon
+      playbackStatus {
+        isPlaying
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGuildsQuery__
@@ -255,41 +316,41 @@ export const GuildsDocument = gql`
  * });
  */
 export function useGuildsQuery(baseOptions?: Apollo.QueryHookOptions<GuildsQuery, GuildsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GuildsQuery, GuildsQueryVariables>(GuildsDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GuildsQuery, GuildsQueryVariables>(GuildsDocument, options);
+}
 export function useGuildsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GuildsQuery, GuildsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GuildsQuery, GuildsQueryVariables>(GuildsDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GuildsQuery, GuildsQueryVariables>(GuildsDocument, options);
+}
 export type GuildsQueryHookResult = ReturnType<typeof useGuildsQuery>;
 export type GuildsLazyQueryHookResult = ReturnType<typeof useGuildsLazyQuery>;
 export type GuildsQueryResult = Apollo.QueryResult<GuildsQuery, GuildsQueryVariables>;
 export const GuildDocument = gql`
-    query guild($guildId: String!) {
-  guild(guildId: $guildId) {
-    id
-    playbackStatus {
-      isPlaying
-      currentTime
-      currentlyPlaying {
-        id
-        title
-        url
-        thumbnail
-        duration
-      }
-      queue {
-        id
-        title
-        url
-        thumbnail
-        duration
+  query guild($guildId: String!) {
+    guild(guildId: $guildId) {
+      id
+      playbackStatus {
+        isPlaying
+        currentTime
+        currentlyPlaying {
+          id
+          title
+          url
+          thumbnail
+          duration
+        }
+        queue {
+          id
+          title
+          url
+          thumbnail
+          duration
+        }
       }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGuildQuery__
@@ -308,26 +369,26 @@ export const GuildDocument = gql`
  * });
  */
 export function useGuildQuery(baseOptions: Apollo.QueryHookOptions<GuildQuery, GuildQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GuildQuery, GuildQueryVariables>(GuildDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GuildQuery, GuildQueryVariables>(GuildDocument, options);
+}
 export function useGuildLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GuildQuery, GuildQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GuildQuery, GuildQueryVariables>(GuildDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GuildQuery, GuildQueryVariables>(GuildDocument, options);
+}
 export type GuildQueryHookResult = ReturnType<typeof useGuildQuery>;
 export type GuildLazyQueryHookResult = ReturnType<typeof useGuildLazyQuery>;
 export type GuildQueryResult = Apollo.QueryResult<GuildQuery, GuildQueryVariables>;
 export const LogsDocument = gql`
-    query logs($limit: Int) {
-  logs(limit: $limit) {
-    id
-    timestamp
-    level
-    message
+  query logs($limit: Int) {
+    logs(limit: $limit) {
+      id
+      timestamp
+      level
+      message
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useLogsQuery__
@@ -346,23 +407,23 @@ export const LogsDocument = gql`
  * });
  */
 export function useLogsQuery(baseOptions?: Apollo.QueryHookOptions<LogsQuery, LogsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
+}
 export function useLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogsQuery, LogsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<LogsQuery, LogsQueryVariables>(LogsDocument, options);
+}
 export type LogsQueryHookResult = ReturnType<typeof useLogsQuery>;
 export type LogsLazyQueryHookResult = ReturnType<typeof useLogsLazyQuery>;
 export type LogsQueryResult = Apollo.QueryResult<LogsQuery, LogsQueryVariables>;
 export const SettingsDocument = gql`
-    query settings {
-  settings {
-    hasAlreadyRegisteredCommands
+  query settings {
+    settings {
+      hasAlreadyRegisteredCommands
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useSettingsQuery__
@@ -380,23 +441,23 @@ export const SettingsDocument = gql`
  * });
  */
 export function useSettingsQuery(baseOptions?: Apollo.QueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+}
 export function useSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SettingsQuery, SettingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SettingsQuery, SettingsQueryVariables>(SettingsDocument, options);
+}
 export type SettingsQueryHookResult = ReturnType<typeof useSettingsQuery>;
 export type SettingsLazyQueryHookResult = ReturnType<typeof useSettingsLazyQuery>;
 export type SettingsQueryResult = Apollo.QueryResult<SettingsQuery, SettingsQueryVariables>;
 export const UserDocument = gql`
-    query user {
-  user {
-    isAdmin
+  query user {
+    user {
+      isAdmin
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useUserQuery__
@@ -414,27 +475,27 @@ export const UserDocument = gql`
  * });
  */
 export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+}
 export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+}
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const SearchSongsDocument = gql`
-    query searchSongs($query: String!) {
-  searchSongs(query: $query) {
-    id
-    title
-    url
-    thumbnail
-    duration
+  query searchSongs($query: String!) {
+    searchSongs(query: $query) {
+      id
+      title
+      url
+      thumbnail
+      duration
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useSearchSongsQuery__
@@ -453,22 +514,27 @@ export const SearchSongsDocument = gql`
  * });
  */
 export function useSearchSongsQuery(baseOptions: Apollo.QueryHookOptions<SearchSongsQuery, SearchSongsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
-      }
-export function useSearchSongsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchSongsQuery, SearchSongsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
+}
+export function useSearchSongsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SearchSongsQuery, SearchSongsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SearchSongsQuery, SearchSongsQueryVariables>(SearchSongsDocument, options);
+}
 export type SearchSongsQueryHookResult = ReturnType<typeof useSearchSongsQuery>;
 export type SearchSongsLazyQueryHookResult = ReturnType<typeof useSearchSongsLazyQuery>;
 export type SearchSongsQueryResult = Apollo.QueryResult<SearchSongsQuery, SearchSongsQueryVariables>;
 export const RegisterCommandsDocument = gql`
-    mutation registerCommands {
-  registerCommands
-}
-    `;
-export type RegisterCommandsMutationFn = Apollo.MutationFunction<RegisterCommandsMutation, RegisterCommandsMutationVariables>;
+  mutation registerCommands {
+    registerCommands
+  }
+`;
+export type RegisterCommandsMutationFn = Apollo.MutationFunction<
+  RegisterCommandsMutation,
+  RegisterCommandsMutationVariables
+>;
 
 /**
  * __useRegisterCommandsMutation__
@@ -486,18 +552,26 @@ export type RegisterCommandsMutationFn = Apollo.MutationFunction<RegisterCommand
  *   },
  * });
  */
-export function useRegisterCommandsMutation(baseOptions?: Apollo.MutationHookOptions<RegisterCommandsMutation, RegisterCommandsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterCommandsMutation, RegisterCommandsMutationVariables>(RegisterCommandsDocument, options);
-      }
+export function useRegisterCommandsMutation(
+  baseOptions?: Apollo.MutationHookOptions<RegisterCommandsMutation, RegisterCommandsMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RegisterCommandsMutation, RegisterCommandsMutationVariables>(
+    RegisterCommandsDocument,
+    options
+  );
+}
 export type RegisterCommandsMutationHookResult = ReturnType<typeof useRegisterCommandsMutation>;
 export type RegisterCommandsMutationResult = Apollo.MutationResult<RegisterCommandsMutation>;
-export type RegisterCommandsMutationOptions = Apollo.BaseMutationOptions<RegisterCommandsMutation, RegisterCommandsMutationVariables>;
+export type RegisterCommandsMutationOptions = Apollo.BaseMutationOptions<
+  RegisterCommandsMutation,
+  RegisterCommandsMutationVariables
+>;
 export const RestartDocument = gql`
-    mutation restart {
-  restart
-}
-    `;
+  mutation restart {
+    restart
+  }
+`;
 export type RestartMutationFn = Apollo.MutationFunction<RestartMutation, RestartMutationVariables>;
 
 /**
@@ -516,18 +590,20 @@ export type RestartMutationFn = Apollo.MutationFunction<RestartMutation, Restart
  *   },
  * });
  */
-export function useRestartMutation(baseOptions?: Apollo.MutationHookOptions<RestartMutation, RestartMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RestartMutation, RestartMutationVariables>(RestartDocument, options);
-      }
+export function useRestartMutation(
+  baseOptions?: Apollo.MutationHookOptions<RestartMutation, RestartMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RestartMutation, RestartMutationVariables>(RestartDocument, options);
+}
 export type RestartMutationHookResult = ReturnType<typeof useRestartMutation>;
 export type RestartMutationResult = Apollo.MutationResult<RestartMutation>;
 export type RestartMutationOptions = Apollo.BaseMutationOptions<RestartMutation, RestartMutationVariables>;
 export const ResumeDocument = gql`
-    mutation resume($guildId: String!) {
-  resume(guildId: $guildId)
-}
-    `;
+  mutation resume($guildId: String!) {
+    resume(guildId: $guildId)
+  }
+`;
 export type ResumeMutationFn = Apollo.MutationFunction<ResumeMutation, ResumeMutationVariables>;
 
 /**
@@ -548,17 +624,17 @@ export type ResumeMutationFn = Apollo.MutationFunction<ResumeMutation, ResumeMut
  * });
  */
 export function useResumeMutation(baseOptions?: Apollo.MutationHookOptions<ResumeMutation, ResumeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ResumeMutation, ResumeMutationVariables>(ResumeDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ResumeMutation, ResumeMutationVariables>(ResumeDocument, options);
+}
 export type ResumeMutationHookResult = ReturnType<typeof useResumeMutation>;
 export type ResumeMutationResult = Apollo.MutationResult<ResumeMutation>;
 export type ResumeMutationOptions = Apollo.BaseMutationOptions<ResumeMutation, ResumeMutationVariables>;
 export const PauseDocument = gql`
-    mutation pause($guildId: String!) {
-  pause(guildId: $guildId)
-}
-    `;
+  mutation pause($guildId: String!) {
+    pause(guildId: $guildId)
+  }
+`;
 export type PauseMutationFn = Apollo.MutationFunction<PauseMutation, PauseMutationVariables>;
 
 /**
@@ -579,17 +655,17 @@ export type PauseMutationFn = Apollo.MutationFunction<PauseMutation, PauseMutati
  * });
  */
 export function usePauseMutation(baseOptions?: Apollo.MutationHookOptions<PauseMutation, PauseMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PauseMutation, PauseMutationVariables>(PauseDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PauseMutation, PauseMutationVariables>(PauseDocument, options);
+}
 export type PauseMutationHookResult = ReturnType<typeof usePauseMutation>;
 export type PauseMutationResult = Apollo.MutationResult<PauseMutation>;
 export type PauseMutationOptions = Apollo.BaseMutationOptions<PauseMutation, PauseMutationVariables>;
 export const SkipDocument = gql`
-    mutation skip($guildId: String!) {
-  skip(guildId: $guildId)
-}
-    `;
+  mutation skip($guildId: String!) {
+    skip(guildId: $guildId)
+  }
+`;
 export type SkipMutationFn = Apollo.MutationFunction<SkipMutation, SkipMutationVariables>;
 
 /**
@@ -610,18 +686,21 @@ export type SkipMutationFn = Apollo.MutationFunction<SkipMutation, SkipMutationV
  * });
  */
 export function useSkipMutation(baseOptions?: Apollo.MutationHookOptions<SkipMutation, SkipMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SkipMutation, SkipMutationVariables>(SkipDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SkipMutation, SkipMutationVariables>(SkipDocument, options);
+}
 export type SkipMutationHookResult = ReturnType<typeof useSkipMutation>;
 export type SkipMutationResult = Apollo.MutationResult<SkipMutation>;
 export type SkipMutationOptions = Apollo.BaseMutationOptions<SkipMutation, SkipMutationVariables>;
 export const RemoveQueuedSongDocument = gql`
-    mutation removeQueuedSong($guildId: String!, $songId: String!) {
-  removeQueuedSong(guildId: $guildId, songId: $songId)
-}
-    `;
-export type RemoveQueuedSongMutationFn = Apollo.MutationFunction<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>;
+  mutation removeQueuedSong($guildId: String!, $songId: String!) {
+    removeQueuedSong(guildId: $guildId, songId: $songId)
+  }
+`;
+export type RemoveQueuedSongMutationFn = Apollo.MutationFunction<
+  RemoveQueuedSongMutation,
+  RemoveQueuedSongMutationVariables
+>;
 
 /**
  * __useRemoveQueuedSongMutation__
@@ -641,18 +720,26 @@ export type RemoveQueuedSongMutationFn = Apollo.MutationFunction<RemoveQueuedSon
  *   },
  * });
  */
-export function useRemoveQueuedSongMutation(baseOptions?: Apollo.MutationHookOptions<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>(RemoveQueuedSongDocument, options);
-      }
+export function useRemoveQueuedSongMutation(
+  baseOptions?: Apollo.MutationHookOptions<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>(
+    RemoveQueuedSongDocument,
+    options
+  );
+}
 export type RemoveQueuedSongMutationHookResult = ReturnType<typeof useRemoveQueuedSongMutation>;
 export type RemoveQueuedSongMutationResult = Apollo.MutationResult<RemoveQueuedSongMutation>;
-export type RemoveQueuedSongMutationOptions = Apollo.BaseMutationOptions<RemoveQueuedSongMutation, RemoveQueuedSongMutationVariables>;
+export type RemoveQueuedSongMutationOptions = Apollo.BaseMutationOptions<
+  RemoveQueuedSongMutation,
+  RemoveQueuedSongMutationVariables
+>;
 export const QueueSongDocument = gql`
-    mutation queueSong($guildId: String!, $songUrl: String!) {
-  queueSong(guildId: $guildId, songUrl: $songUrl)
-}
-    `;
+  mutation queueSong($guildId: String!, $songUrl: String!) {
+    queueSong(guildId: $guildId, songUrl: $songUrl)
+  }
+`;
 export type QueueSongMutationFn = Apollo.MutationFunction<QueueSongMutation, QueueSongMutationVariables>;
 
 /**
@@ -673,38 +760,40 @@ export type QueueSongMutationFn = Apollo.MutationFunction<QueueSongMutation, Que
  *   },
  * });
  */
-export function useQueueSongMutation(baseOptions?: Apollo.MutationHookOptions<QueueSongMutation, QueueSongMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<QueueSongMutation, QueueSongMutationVariables>(QueueSongDocument, options);
-      }
+export function useQueueSongMutation(
+  baseOptions?: Apollo.MutationHookOptions<QueueSongMutation, QueueSongMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<QueueSongMutation, QueueSongMutationVariables>(QueueSongDocument, options);
+}
 export type QueueSongMutationHookResult = ReturnType<typeof useQueueSongMutation>;
 export type QueueSongMutationResult = Apollo.MutationResult<QueueSongMutation>;
 export type QueueSongMutationOptions = Apollo.BaseMutationOptions<QueueSongMutation, QueueSongMutationVariables>;
 export const GuildUpdatedDocument = gql`
-    subscription guildUpdated($guildId: String!) {
-  guildUpdated(guildId: $guildId) {
-    id
-    playbackStatus {
-      isPlaying
-      currentTime
-      currentlyPlaying {
-        id
-        title
-        url
-        thumbnail
-        duration
-      }
-      queue {
-        id
-        title
-        url
-        thumbnail
-        duration
+  subscription guildUpdated($guildId: String!) {
+    guildUpdated(guildId: $guildId) {
+      id
+      playbackStatus {
+        isPlaying
+        currentTime
+        currentlyPlaying {
+          id
+          title
+          url
+          thumbnail
+          duration
+        }
+        queue {
+          id
+          title
+          url
+          thumbnail
+          duration
+        }
       }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGuildUpdatedSubscription__
@@ -722,9 +811,14 @@ export const GuildUpdatedDocument = gql`
  *   },
  * });
  */
-export function useGuildUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>(GuildUpdatedDocument, options);
-      }
+export function useGuildUpdatedSubscription(
+  baseOptions: Apollo.SubscriptionHookOptions<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<GuildUpdatedSubscription, GuildUpdatedSubscriptionVariables>(
+    GuildUpdatedDocument,
+    options
+  );
+}
 export type GuildUpdatedSubscriptionHookResult = ReturnType<typeof useGuildUpdatedSubscription>;
 export type GuildUpdatedSubscriptionResult = Apollo.SubscriptionResult<GuildUpdatedSubscription>;
