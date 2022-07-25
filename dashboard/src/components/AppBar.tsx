@@ -35,7 +35,9 @@ export function AppBar() {
             </div>
           )}
         </div>
-        <Button text="Logout" className="m-1" onClick={logout} />
+        <Button className="m-1" onClick={logout}>
+          Logout
+        </Button>
       </nav>
       <div className="flex-1 relative overflow-auto h-full bg-gray-2">
         <Outlet />

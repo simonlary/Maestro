@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ButtonParams {
-  text: string;
+  children: React.ReactNode;
   size?: "sm" | "md" | "lg";
   variant?: "normal" | "destructive" | "warning" | "success";
   className?: string;
@@ -10,7 +10,7 @@ interface ButtonParams {
 }
 
 export function Button({
-  text,
+  children,
   size = "md",
   variant = "normal",
   className,
@@ -39,7 +39,7 @@ export function Button({
 
   return (
     <button className={`${base} ${variantStyle} ${sizeStyle} ${className}`} onClick={onClick} disabled={disabled}>
-      {text}
+      {children}
     </button>
   );
 }

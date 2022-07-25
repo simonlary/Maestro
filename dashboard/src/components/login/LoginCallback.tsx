@@ -3,7 +3,6 @@ import { config } from "../../config";
 
 export function LoginCallback() {
   const { hash } = useLocation();
-  console.log(hash);
 
   const params = new URLSearchParams(hash.slice(1));
   const accessToken = params.get("access_token");
@@ -11,5 +10,5 @@ export function LoginCallback() {
     config.setAccessToken(accessToken);
   }
 
-  return config.accessToken == null ? <Navigate to="/login" /> : <Navigate to="/guilds" />;
+  return config.accessToken == null ? <Navigate to="/login?error" /> : <Navigate to="/guilds" />;
 }
