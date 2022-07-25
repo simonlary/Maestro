@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserQuery } from "../apollo/generated";
+import { config } from "../config";
 import { Spinner } from "./controls/Spinner";
 import { NotAuthorized } from "./NotAuthorized";
 
@@ -19,6 +20,8 @@ export function ProtectedRoute({ requiresAdmin = false }: ProtectedRouteProps) {
   }
 
   if (data == null) {
+    // Token is most likely expired and we need to log in again.
+    config.clearAccessToken();
     return <Navigate to="/login" />;
   }
 
