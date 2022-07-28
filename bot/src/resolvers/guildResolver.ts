@@ -1,7 +1,7 @@
 import { AudioPlayerStatus } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
-import { Context } from "../authentification.js";
+import { Context } from "../authentication.js";
 import { logger } from "../utils/logger.js";
 import { Guild } from "../schema/guild.js";
 import { PlaybackStatus } from "../schema/playbackStatus.js";

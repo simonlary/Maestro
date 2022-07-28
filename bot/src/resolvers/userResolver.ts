@@ -1,5 +1,5 @@
 import { Authorized, Ctx, Query, Resolver } from "type-graphql";
-import { Context } from "../authentification.js";
+import { Context } from "../authentication.js";
 import { UserData } from "../discord.js";
 import { User } from "../schema/user.js";
 

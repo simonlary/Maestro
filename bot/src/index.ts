@@ -16,7 +16,7 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
-import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentification.js";
+import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
 import { UserResolver } from "./resolvers/userResolver.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
