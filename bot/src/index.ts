@@ -4,11 +4,11 @@ import { Bot } from "./bot.js";
 import { Config } from "./config.js";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { createGuildResolver } from "./resolvers/guildResolver.js";
-import { createSettingsResolver } from "./resolvers/settingsResolver.js";
-import { createLogResolver } from "./resolvers/logResolver.js";
-import { createSongResolver } from "./resolvers/songResolver.js";
-import { logger } from "./logger.js";
+import { GuildResolver } from "./resolvers/guildResolver.js";
+import { SettingsResolver } from "./resolvers/settingsResolver.js";
+import { LogResolver } from "./resolvers/logResolver.js";
+import { SongResolver } from "./resolvers/songResolver.js";
+import { logger } from "./utils/logger.js";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
@@ -16,7 +16,8 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
-import { authChecker, createContext, createWsContext } from "./authentification.js";
+import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
+import { UserResolver } from "./resolvers/userResolver.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,7 +32,7 @@ const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [createGuildResolver(bot), createSettingsResolver(bot), createLogResolver(), createSongResolver()],
+  resolvers: [GuildResolver, LogResolver, SettingsResolver, SongResolver, UserResolver],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
   authChecker,
@@ -49,7 +50,7 @@ const wsServer = new WebSocketServer({
 const serverCleanup = useServer(
   {
     schema,
-    context: createWsContext,
+    context: buildCreateWsContextFunction(bot, config),
   },
   wsServer
 );
@@ -57,7 +58,7 @@ const serverCleanup = useServer(
 logger.info("Creating Apollo server...");
 const server = new ApolloServer({
   schema,
-  context: createContext,
+  context: buildCreateContextFunction(bot, config),
   plugins: [
     // Shutdown the HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),

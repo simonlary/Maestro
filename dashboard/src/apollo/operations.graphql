@@ -3,29 +3,32 @@ query guilds {
     id
     name
     icon
+    playbackStatus {
+      isPlaying
+    }
   }
 }
 
 query guild($guildId: String!) {
   guild(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }
@@ -45,13 +48,19 @@ query settings {
   }
 }
 
+query user {
+  user {
+    isAdmin
+  }
+}
+
 query searchSongs($query: String!) {
   searchSongs(query: $query) {
-      id
-      title
-      url
-      thumbnail
-      duration
+    id
+    title
+    url
+    thumbnail
+    duration
   }
 }
 
@@ -86,23 +95,23 @@ mutation queueSong($guildId: String!, $songUrl: String!) {
 subscription guildUpdated($guildId: String!) {
   guildUpdated(guildId: $guildId) {
     id
-    currentlyPlaying {
-      id
-      title
-      url
-      thumbnail
-      duration
-    }
     playbackStatus {
       isPlaying
       currentTime
-    }
-    queue {
-      id
-      title
-      url
-      thumbnail
-      duration
+      currentlyPlaying {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
+      queue {
+        id
+        title
+        url
+        thumbnail
+        duration
+      }
     }
   }
 }

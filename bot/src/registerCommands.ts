@@ -52,8 +52,13 @@ export async function registerCommands(client: Client, config: Config) {
     .setName("queue")
     .setDescription("Show the currently queued songs.")
     .toJSON();
+  const dashboard = new SlashCommandBuilder()
+    .setDMPermission(true)
+    .setName("dashboard")
+    .setDescription("Get the control dashboard link.")
+    .toJSON();
 
-  const commands = [play, stop, skip, pause, resume, queue];
+  const commands = [play, stop, skip, pause, resume, queue, dashboard];
 
   const rest = new REST({ version: "10" }).setToken(config.token);
   if (config.debugGuilds.length === 0) {
