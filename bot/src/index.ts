@@ -6,18 +6,17 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import { GuildResolver } from "./resolvers/guildResolver.js";
 import { SettingsResolver } from "./resolvers/settingsResolver.js";
-import { LogResolver } from "./resolvers/logResolver.js";
+import { LogsResolver } from "./resolvers/logsResolver.js";
 import { SongResolver } from "./resolvers/songResolver.js";
 import logger from "./utils/logger.js";
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer, GraphQLRequestContext } from "apollo-server-core";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
-import crypto from "crypto";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
-import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction, Context } from "./authentication.js";
+import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
 import { UserResolver } from "./resolvers/userResolver.js";
 import { ApolloServerPluginDrainWsServer, ApolloServerPluginLogger } from "./apolloServerPlugins.js";
 
@@ -34,7 +33,7 @@ const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [GuildResolver, LogResolver, SettingsResolver, SongResolver, UserResolver],
+  resolvers: [GuildResolver, LogsResolver, SettingsResolver, SongResolver, UserResolver],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
   authChecker,

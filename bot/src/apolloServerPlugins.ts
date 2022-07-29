@@ -1,6 +1,8 @@
-import { PluginDefinition } from "apollo-server-core";
+import { GraphQLRequestContext, PluginDefinition } from "apollo-server-core";
 import { Disposable } from "graphql-ws";
-import logger from "./utils/logger";
+import crypto from "crypto";
+import logger from "./utils/logger.js";
+import { Context } from "./authentication.js";
 
 export function ApolloServerPluginDrainWsServer(serverCleanup: Disposable): PluginDefinition {
   return {
@@ -16,7 +18,7 @@ export function ApolloServerPluginDrainWsServer(serverCleanup: Disposable): Plug
 
 export function ApolloServerPluginLogger(): PluginDefinition {
   return {
-    async requestDidStart(requestContext) {
+    async requestDidStart(requestContext: GraphQLRequestContext<Context>) {
       if (requestContext.request.operationName === "IntrospectionQuery") return; // TODO : Remove this
 
       requestContext.logger = logger.child({ requestId: crypto.randomUUID() });
@@ -24,6 +26,14 @@ export function ApolloServerPluginLogger(): PluginDefinition {
         operationName: requestContext.request.operationName,
         query: requestContext.request.query,
         variables: requestContext.request.variables,
+        user:
+          requestContext.context.user == null
+            ? undefined
+            : {
+                id: requestContext.context.user.id,
+                username: requestContext.context.user.username,
+                discriminator: requestContext.context.user.discriminator,
+              },
       });
 
       return {
