@@ -27,7 +27,7 @@ const config = new Config();
 logger.info("Creating PubSub...");
 const pubSub = new PubSub();
 
-logger.info("Instanciating bot...");
+logger.info("Creating Bot...");
 const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
@@ -62,7 +62,6 @@ const server = new ApolloServer({
   plugins: [
     // Shutdown the HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),
-
     // Shutdown the WS server
     {
       async serverWillStart() {
@@ -85,7 +84,7 @@ await server.start();
 server.applyMiddleware({ app, path: "/" });
 const port = process.env.PORT || 3001;
 await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
-logger.info(`Listening on: http://localhost:${port}`);
+logger.info(`Listening on port ${port}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();

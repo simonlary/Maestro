@@ -44,12 +44,12 @@ export class Bot {
   private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
 
   public static async create(config: Config, pubSub: PubSubEngine) {
-    logger.info("Creating client...");
+    logger.info("Creating discord.js client...");
     const client = new Client({
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
     });
 
-    logger.info("Creating bot...");
+    logger.info("Instanciating bot...");
     const bot = new Bot(config, client, pubSub);
 
     logger.info("Logging in...");
@@ -75,7 +75,6 @@ export class Bot {
   }
 
   public async registerCommands() {
-    logger.info("Registering commands...");
     await registerCommands(this.client, this.config);
   }
 
@@ -91,7 +90,6 @@ export class Bot {
     }
 
     const song = guild.queue.splice(songIndex, 1)[0];
-    logger.info(`Removed queued song "${song.title}" in guild "${guild.guildInfo.name}"`);
     this.guildUpdated(guild.guildInfo.id);
 
     return song;
@@ -113,14 +111,12 @@ export class Bot {
     }
 
     activeGuild.queue.push(song);
-    logger.info(`Queued song "${song.title}" in guild "${activeGuild.guildInfo.name}"`);
     this.guildUpdated(activeGuild.guildInfo.id);
 
     return song;
   }
 
   public shutdown() {
-    logger.info("Shutting down...");
     this.client.destroy();
   }
 
@@ -134,13 +130,13 @@ export class Bot {
       return;
     }
 
-    if (interaction.guild != null) {
+    if (interaction.guild == null) {
       logger.info(
-        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}" in guild "${interaction.guild.name}" (${interaction.guild.id}).`
+        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
       );
     } else {
       logger.info(
-        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
+        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}" in guild "${interaction.guild.name}" (${interaction.guild.id}).`
       );
     }
 
@@ -171,13 +167,13 @@ export class Bot {
           logger.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
           break;
       }
-    } catch (e) {
-      if (typeof e === "string") {
-        logger.error(e);
-      } else if (e instanceof Error) {
-        logger.error(e.message);
+    } catch (error) {
+      if (typeof error === "string") {
+        logger.error(`Error executing command "${interaction.commandName}" : ${error}`);
+      } else if (error instanceof Error) {
+        logger.error(`Error executing command "${interaction.commandName}" : ${error.message}`);
       } else {
-        logger.error(`Received unknown error : ${e}`);
+        logger.error(`Error executing command "${interaction.commandName}" : ${error}`);
       }
       if (interaction.replied) {
         await interaction.followUp({ content: "Sorry, there was an error executing you command.", ephemeral: true });
