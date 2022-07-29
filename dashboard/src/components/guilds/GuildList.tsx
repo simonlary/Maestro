@@ -36,6 +36,7 @@ function GuildEntry({ guild }: { guild: GuildInfo }) {
           isActive ? "bg-selected" : "hover:bg-hover"
         }`
       }
+      title={guild.name}
       onMouseEnter={() => setIcon(icons.animated)}
       onMouseLeave={() => setIcon(icons.static)}
     >

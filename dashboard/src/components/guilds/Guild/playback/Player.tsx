@@ -73,7 +73,9 @@ export function Player({ song, playbackStatus, guildId, currentSongTime }: Playe
           <div className="w-16 h-16 flex-shrink-0 bg-blue">
             <img src={song.thumbnail} alt="" className="h-full object-cover" />
           </div>
-          <div className="line-clamp-2">{song.title}</div>
+          <div className="line-clamp-2" title={song.title}>
+            {song.title}
+          </div>
         </div>
 
         {/* Controls */}
