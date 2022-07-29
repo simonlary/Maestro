@@ -21,20 +21,24 @@ export function ApolloServerPluginLogger(): PluginDefinition {
     async requestDidStart(requestContext: GraphQLRequestContext<Context>) {
       if (requestContext.request.operationName === "IntrospectionQuery") return; // TODO : Remove this
 
-      requestContext.logger = logger.child({ requestId: crypto.randomUUID() });
-      requestContext.logger.info({
-        operationName: requestContext.request.operationName,
-        query: requestContext.request.query,
-        variables: requestContext.request.variables,
-        user:
-          requestContext.context.user == null
-            ? undefined
-            : {
-                id: requestContext.context.user.id,
-                username: requestContext.context.user.username,
-                discriminator: requestContext.context.user.discriminator,
-              },
-      });
+      const requestLogger = logger.child({ requestId: crypto.randomUUID() });
+      requestContext.logger = requestLogger;
+      requestLogger.info(
+        {
+          operationName: requestContext.request.operationName,
+          query: requestContext.request.query,
+          variables: requestContext.request.variables,
+          user:
+            requestContext.context.user == null
+              ? undefined
+              : {
+                  id: requestContext.context.user.id,
+                  username: requestContext.context.user.username,
+                  discriminator: requestContext.context.user.discriminator,
+                },
+        },
+        "Request received"
+      );
 
       return {
         async didEncounterErrors(requestContext) {

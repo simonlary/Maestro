@@ -13,7 +13,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  LogLevel: "info" | "warning" | "error";
 };
 
 export type Guild = {
@@ -26,10 +25,8 @@ export type Guild = {
 
 export type Log = {
   __typename?: 'Log';
-  id: Scalars['Int'];
-  level: Scalars['LogLevel'];
+  id: Scalars['Float'];
   message: Scalars['String'];
-  timestamp: Scalars['String'];
 };
 
 export type Mutation = {
@@ -152,7 +149,7 @@ export type LogsQueryVariables = Exact<{
 }>;
 
 
-export type LogsQuery = { __typename?: 'Query', logs: Array<{ __typename?: 'Log', id: number, timestamp: string, level: "info" | "warning" | "error", message: string }> };
+export type LogsQuery = { __typename?: 'Query', logs: Array<{ __typename?: 'Log', id: number, message: string }> };
 
 export type SettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -322,8 +319,6 @@ export const LogsDocument = gql`
     query logs($limit: Int) {
   logs(limit: $limit) {
     id
-    timestamp
-    level
     message
   }
 }

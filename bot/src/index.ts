@@ -6,7 +6,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import { GuildResolver } from "./resolvers/guildResolver.js";
 import { SettingsResolver } from "./resolvers/settingsResolver.js";
-import { LogsResolver } from "./resolvers/logsResolver.js";
+import { LogResolver } from "./resolvers/logResolver.js";
 import { SongResolver } from "./resolvers/songResolver.js";
 import logger from "./utils/logger.js";
 import { ApolloServer } from "apollo-server-express";
@@ -33,7 +33,7 @@ const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
 const schema = await buildSchema({
-  resolvers: [GuildResolver, LogsResolver, SettingsResolver, SongResolver, UserResolver],
+  resolvers: [GuildResolver, LogResolver, SettingsResolver, SongResolver, UserResolver],
   emitSchemaFile: path.resolve(__dirname, "schema.gql"),
   pubSub,
   authChecker,

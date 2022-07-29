@@ -181,7 +181,7 @@ export class Bot {
           break;
       }
     } catch (error) {
-      commandLogger.error("Error executing command", { error });
+      commandLogger.error({ error }, "Error executing command");
       if (interaction.replied) {
         await interaction.followUp({ content: "Sorry, there was an error executing you command.", ephemeral: true });
       } else {
