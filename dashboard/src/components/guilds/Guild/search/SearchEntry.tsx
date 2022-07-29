@@ -1,7 +1,7 @@
 import { BsPlusLg } from "react-icons/bs";
 import { RiYoutubeFill } from "react-icons/ri";
 import { Song, useQueueSongMutation } from "../../../../apollo/generated";
-import { formatDuration } from "../../../../utils";
+import { formatDuration } from "../../../../utils/formatters";
 
 export function SearchEntry({ song, guildId }: { song: Song; guildId: string }) {
   const [queueSongMutation] = useQueueSongMutation();

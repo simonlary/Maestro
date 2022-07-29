@@ -1,6 +1,6 @@
 import { RiBarChartFill, RiCloseCircleLine, RiYoutubeFill } from "react-icons/ri";
 import { Song } from "../../../../apollo/generated";
-import { formatDuration } from "../../../../utils";
+import { formatDuration } from "../../../../utils/formatters";
 
 interface FirstSongsProps {
   song: Song;
