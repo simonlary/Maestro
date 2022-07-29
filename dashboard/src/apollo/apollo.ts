@@ -36,6 +36,16 @@ export function createApolloClient() {
 
   return new ApolloClient({
     link: httpAuth.concat(splitLink),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Guild: {
+          fields: {
+            playbackStatus: {
+              merge: true,
+            },
+          },
+        },
+      },
+    }),
   });
 }
