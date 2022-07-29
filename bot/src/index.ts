@@ -8,16 +8,18 @@ import { GuildResolver } from "./resolvers/guildResolver.js";
 import { SettingsResolver } from "./resolvers/settingsResolver.js";
 import { LogResolver } from "./resolvers/logResolver.js";
 import { SongResolver } from "./resolvers/songResolver.js";
-import { logger } from "./utils/logger.js";
+import logger from "./utils/logger.js";
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServerPluginDrainHttpServer, GraphQLRequestContext } from "apollo-server-core";
 import express from "express";
+import crypto from "crypto";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
-import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
+import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction, Context } from "./authentication.js";
 import { UserResolver } from "./resolvers/userResolver.js";
+import { ApolloServerPluginDrainWsServer, ApolloServerPluginLogger } from "./apolloServerPlugins.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -60,23 +62,10 @@ const server = new ApolloServer({
   schema,
   context: buildCreateContextFunction(bot, config),
   plugins: [
-    // Shutdown the HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),
-    // Shutdown the WS server
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          },
-        };
-      },
-    },
+    ApolloServerPluginDrainWsServer(serverCleanup),
+    ApolloServerPluginLogger(),
   ],
-  formatError: (e) => {
-    logger.error(`GraphQL Error : ${e.message}`);
-    return e;
-  },
 });
 
 logger.info("Starting Apollo server...");

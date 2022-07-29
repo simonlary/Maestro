@@ -13,8 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && npm run deploy",
-    "deploy": "node ./out/index.js",
+    "start": "npm run build && node ./out/index.js | npx pino-pretty",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{js,jsx,ts,tsx,json}",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
@@ -37,6 +36,7 @@
     "libsodium-wrappers": "^0.7.10",
     "node-fetch": "^3.2.9",
     "opusscript": "^0.0.8",
+    "pino": "^8.3.1",
     "play-dl": "^1.9.5",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
@@ -50,6 +50,7 @@
     "eslint-import-resolver-typescript": "^3.1.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "pino-pretty": "^8.1.0",
     "prettier": "^2.7.1",
     "typescript": "^4.7.4"
   }

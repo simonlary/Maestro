@@ -1,5 +1,4 @@
 import { Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { logger } from "../utils/logger.js";
 import { Settings } from "../schema/settings.js";
 import { spawn } from "child_process";
 import { Context } from "../authentication.js";
@@ -23,7 +22,6 @@ export class SettingsResolver {
     if (this.isRestarting) return false;
     this.isRestarting = true;
 
-    logger.warn("Manual restart requested");
     setTimeout(function () {
       process.on("exit", function () {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

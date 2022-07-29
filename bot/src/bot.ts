@@ -14,7 +14,7 @@ import crypto from "crypto";
 import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
-import { logger } from "./utils/logger.js";
+import logger from "./utils/logger.js";
 import { PubSubEngine } from "graphql-subscriptions";
 
 interface GuildInfo {
@@ -125,20 +125,33 @@ export class Bot {
   }
 
   private onInteractionCreate = async (interaction: Interaction) => {
+    const interactionLogger = logger.child({
+      id: interaction.id,
+      type: interaction.type,
+      createdAt: interaction.createdAt,
+      channelId: interaction.channelId,
+      guild:
+        interaction.guild == null
+          ? undefined
+          : {
+              id: interaction.guild.id,
+              name: interaction.guild.name,
+            },
+      user: {
+        id: interaction.user.id,
+        tag: interaction.user.tag,
+      },
+    });
     if (!interaction.isCommand()) {
-      logger.warn(`Received an interaction that is not a command : ${interaction.type}`);
+      interactionLogger.warn("Interaction is not a command.");
       return;
     }
 
-    if (interaction.guild == null) {
-      logger.info(
-        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}".`
-      );
-    } else {
-      logger.info(
-        `User "${interaction.user.tag}" (${interaction.user.id}) executed command "${interaction.commandName}" in guild "${interaction.guild.name}" (${interaction.guild.id}).`
-      );
-    }
+    const commandLogger = interactionLogger.child({
+      commandId: interaction.commandId,
+      commandName: interaction.commandName,
+    });
+    commandLogger.info("Command received.");
 
     try {
       switch (interaction.commandName) {
@@ -164,17 +177,11 @@ export class Bot {
           await this.dashboard(interaction);
           break;
         default:
-          logger.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
+          commandLogger.warn(`Received an invalid command name.`);
           break;
       }
     } catch (error) {
-      if (typeof error === "string") {
-        logger.error(`Error executing command "${interaction.commandName}" : ${error}`);
-      } else if (error instanceof Error) {
-        logger.error(`Error executing command "${interaction.commandName}" : ${error.message}`);
-      } else {
-        logger.error(`Error executing command "${interaction.commandName}" : ${error}`);
-      }
+      commandLogger.error("Error executing command", { error });
       if (interaction.replied) {
         await interaction.followUp({ content: "Sorry, there was an error executing you command.", ephemeral: true });
       } else {
@@ -277,7 +284,15 @@ export class Bot {
         this.playNext(activeGuild);
       }
     });
-    activeGuild.audioPlayer.on("error", (e) => logger.error(e.message));
+    activeGuild.audioPlayer.on("error", (error) =>
+      logger.error({
+        error,
+        guild: {
+          id: activeGuild.guildInfo.id,
+          name: activeGuild.guildInfo.name,
+        },
+      })
+    );
   };
 
   private stop = async (interaction: CommandInteraction) => {
