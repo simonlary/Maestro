@@ -1,7 +1,7 @@
 import { BsPlusLg } from "react-icons/bs";
 import { RiYoutubeFill } from "react-icons/ri";
 import { Song, useQueueSongMutation } from "../../../../apollo/generated";
-import { formatDuration } from "../../../../utils";
+import { formatDuration } from "../../../../utils/formatters";
 
 export function SearchEntry({ song, guildId }: { song: Song; guildId: string }) {
   const [queueSongMutation] = useQueueSongMutation();
@@ -22,7 +22,9 @@ export function SearchEntry({ song, guildId }: { song: Song; guildId: string }) 
         <div className="rounded overflow-hidden w-10 h-10 bg-white hidden md:block">
           <img src={song.thumbnail} alt="Song thumbnail" className="w-full h-full object-cover" />
         </div>
-        <span className="flex-1 truncate font-semibold">{song.title}</span>
+        <span className="flex-1 truncate font-semibold" title={song.title}>
+          {song.title}
+        </span>
       </div>
 
       {/* Youtube Link */}

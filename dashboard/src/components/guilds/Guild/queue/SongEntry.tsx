@@ -1,6 +1,6 @@
 import { RiBarChartFill, RiCloseCircleLine, RiYoutubeFill } from "react-icons/ri";
 import { Song } from "../../../../apollo/generated";
-import { formatDuration } from "../../../../utils";
+import { formatDuration } from "../../../../utils/formatters";
 
 interface FirstSongsProps {
   song: Song;
@@ -34,7 +34,9 @@ export function SongEntry(props: SongEntryProps) {
         <div className="rounded overflow-hidden w-10 h-10 hidden md:block">
           <img src={props.song.thumbnail} alt="Song thumbnail" className="w-full h-full object-cover" />
         </div>
-        <span className="flex-1 line-clamp-2 font-semibold">{props.song.title}</span>
+        <span className="flex-1 line-clamp-2 font-semibold" title={props.song.title}>
+          {props.song.title}
+        </span>
       </div>
 
       {/* Youtube Link */}
