@@ -24,6 +24,32 @@ function useIcons(guild: GuildInfo) {
   };
 }
 
+function getDefaultIconString(name: string) {
+  let result = "";
+  let isInWord = false;
+  let lastChar = "";
+  for (const char of name) {
+    const isWord = char.match(/\w/);
+    if (isWord) {
+      if (!isInWord) {
+        result += char;
+        isInWord = true;
+      }
+
+      if (lastChar + char === "'s") {
+        result = result.slice(0, result.length - 2);
+      }
+    } else {
+      if (char.match(/\S/)) {
+        result += char;
+      }
+      isInWord = false;
+    }
+    lastChar = char;
+  }
+  return result;
+}
+
 function GuildEntry({ guild }: { guild: GuildInfo }) {
   const icons = useIcons(guild);
   const [icon, setIcon] = useState(icons.static);
