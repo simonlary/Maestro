@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { GuildList } from "./GuildList";
+import { GuildList } from "./GuildList/GuildList";
 import { useGuildsQuery } from "../../apollo/generated";
 import { useEffect } from "react";
 
