@@ -5,15 +5,19 @@ interface Log {
   message: string;
 }
 
-const MAX_LOGS_SIZE = 2000;
+const MAX_IN_MEMORY_LOGS_SIZE = 2000;
 const LIMIT_LOGS_SIZE_DELAY_IN_MS = 1000;
 
-const logger = new (class {
+class Logger {
   private readonly _logs: Log[] = [];
   private _nextId = 0;
 
   public constructor() {
     setInterval(() => this.limitLogsSize(), LIMIT_LOGS_SIZE_DELAY_IN_MS);
+  }
+
+  public debug(message: string) {
+    console.log(message);
   }
 
   public info(message: string) {
@@ -45,10 +49,10 @@ const logger = new (class {
   }
 
   private limitLogsSize() {
-    if (this._logs.length > MAX_LOGS_SIZE) {
-      this._logs.length = MAX_LOGS_SIZE;
+    if (this._logs.length > MAX_IN_MEMORY_LOGS_SIZE) {
+      this._logs.length = MAX_IN_MEMORY_LOGS_SIZE;
     }
   }
-})();
+}
 
-export { logger };
+export const logger = new Logger();

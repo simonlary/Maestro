@@ -2,7 +2,6 @@ import { AudioPlayerStatus } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
 import { Context } from "../authentication.js";
-import { logger } from "../utils/logger.js";
 import { Guild } from "../schema/guild.js";
 import { PlaybackStatus } from "../schema/playbackStatus.js";
 import { GuildData } from "../discord.js";
@@ -20,7 +19,7 @@ export class GuildResolver {
   async guild(@Ctx() context: Context, @Arg("guildId") guildId: Snowflake): Promise<Guild> {
     const guildData = context.user?.guilds.find((g) => g.id === guildId);
     if (guildData == null) {
-      throw new Error(`No guild with guildId : ${guildId}`);
+      throw new Error(`User not in a guild with guildId : ${guildId}`);
     }
     return this.guildDataToGuild(guildData);
   }
@@ -49,8 +48,6 @@ export class GuildResolver {
     if (guild.audioPlayer == null) {
       throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
     }
-
-    logger.info(`Command "resume" executed from the dashboard in guild "${guild.guildInfo.name}"`);
     return guild.audioPlayer.unpause();
   }
 
@@ -64,8 +61,6 @@ export class GuildResolver {
     if (guild.audioPlayer == null) {
       throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
     }
-
-    logger.info(`Command "pause" executed from the dashboard in guild "${guild.guildInfo.name}"`);
     return guild.audioPlayer.pause(true);
   }
 
@@ -79,8 +74,6 @@ export class GuildResolver {
     if (guild.audioPlayer == null) {
       throw new Error(`Nothing playing on guild with guildId : ${guildId}`);
     }
-
-    logger.info(`Command "skip" executed from the dashboard in guild "${guild.guildInfo.name}"`);
     return guild.audioPlayer.stop();
   }
 

@@ -12,10 +12,10 @@ const dateFormatter = new Intl.DateTimeFormat("fr", {
 });
 
 export function Logs() {
-  const { data, startPolling, stopPolling } = useLogsQuery({ variables: { limit: 500 } });
+  const { data, startPolling, stopPolling } = useLogsQuery({ variables: { limit: 200 } });
 
   useEffect(() => {
-    startPolling(1000);
+    startPolling(2000);
     return () => stopPolling();
   }, [startPolling, stopPolling]);
 
@@ -27,15 +27,12 @@ export function Logs() {
         <div className="py-2 max-h-full flex flex-col-reverse overflow-auto">
           {logs.length === 0
             ? "No Content"
-            : logs.map((l) => {
+            : logs.map((log) => {
+                const colorClass = log.level === "warning" ? "text-yellow" : log.level === "error" ? "text-red" : "";
                 return (
-                  <div key={l.id} className="flex gap-2 hover:bg-gray-2 hover:bg-opacity-20 px-2">
-                    <code className="text-gray-5 shrink-0">{dateFormatter.format(+l.timestamp)}</code>
-                    <code
-                      className={`${l.level === "warning" ? "text-yellow" : l.level === "error" ? "text-red" : ""}`}
-                    >
-                      {l.message}
-                    </code>
+                  <div key={log.id} className="flex gap-2 hover:bg-gray-2 hover:bg-opacity-20 px-2">
+                    <code className="text-gray-5 shrink-0">{dateFormatter.format(+log.timestamp)}</code>
+                    <code className={`whitespace-pre-wrap ${colorClass}`}>{log.message}</code>
                   </div>
                 );
               })}

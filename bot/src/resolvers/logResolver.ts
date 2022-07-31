@@ -6,7 +6,7 @@ import { Log } from "../schema/log.js";
 export class LogResolver {
   @Authorized("ADMIN")
   @Query(() => [Log])
-  async logs(@Arg("limit", () => Int, { defaultValue: 10 }) limit: number): Promise<Log[]> {
+  async logs(@Arg("limit", () => Int, { defaultValue: 20 }) limit: number): Promise<Log[]> {
     return logger.logs.slice(0, limit);
   }
 }

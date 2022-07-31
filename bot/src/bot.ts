@@ -44,12 +44,12 @@ export class Bot {
   private readonly activeGuilds = new Map<Snowflake, ActiveGuild>();
 
   public static async create(config: Config, pubSub: PubSubEngine) {
-    logger.info("Creating client...");
+    logger.info("Creating discord.js client...");
     const client = new Client({
       intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
     });
 
-    logger.info("Creating bot...");
+    logger.info("Instanciating bot...");
     const bot = new Bot(config, client, pubSub);
 
     logger.info("Logging in...");
@@ -75,7 +75,6 @@ export class Bot {
   }
 
   public async registerCommands() {
-    logger.info("Registering commands...");
     await registerCommands(this.client, this.config);
   }
 
@@ -91,7 +90,6 @@ export class Bot {
     }
 
     const song = guild.queue.splice(songIndex, 1)[0];
-    logger.info(`Removed queued song "${song.title}" in guild "${guild.guildInfo.name}"`);
     this.guildUpdated(guild.guildInfo.id);
 
     return song;
@@ -113,14 +111,12 @@ export class Bot {
     }
 
     activeGuild.queue.push(song);
-    logger.info(`Queued song "${song.title}" in guild "${activeGuild.guildInfo.name}"`);
     this.guildUpdated(activeGuild.guildInfo.id);
 
     return song;
   }
 
   public shutdown() {
-    logger.info("Shutting down...");
     this.client.destroy();
   }
 
@@ -130,7 +126,9 @@ export class Bot {
 
   private onInteractionCreate = async (interaction: Interaction) => {
     if (!interaction.isCommand()) {
-      logger.warn(`Received an interaction that is not a command : ${interaction.type}`);
+      logger.warn(
+        `User ${interaction.user.tag} (${interaction.user.id}) used an interaction that is not a command (${interaction.type}).`
+      );
       return;
     }
 
@@ -168,16 +166,16 @@ export class Bot {
           await this.dashboard(interaction);
           break;
         default:
-          logger.warn(`Received an invalid command name to execute : ${interaction.commandName}`);
+          logger.warn(`Received an invalid command name : ${interaction.commandName}`);
           break;
       }
-    } catch (e) {
-      if (typeof e === "string") {
-        logger.error(e);
-      } else if (e instanceof Error) {
-        logger.error(e.message);
+    } catch (error) {
+      if (typeof error === "string") {
+        logger.error(error);
+      } else if (error instanceof Error) {
+        logger.error(error.message);
       } else {
-        logger.error(`Received unknown error : ${e}`);
+        logger.error(`Received unknown error : ${error}`);
       }
       if (interaction.replied) {
         await interaction.followUp({ content: "Sorry, there was an error executing you command.", ephemeral: true });
@@ -281,7 +279,11 @@ export class Bot {
         this.playNext(activeGuild);
       }
     });
-    activeGuild.audioPlayer.on("error", (e) => logger.error(e.message));
+    activeGuild.audioPlayer.on("error", (error) =>
+      logger.error(
+        `Audio player error in guild "${activeGuild.guildInfo.name}" (${activeGuild.guildInfo.id}) : ${error}`
+      )
+    );
   };
 
   private stop = async (interaction: CommandInteraction) => {

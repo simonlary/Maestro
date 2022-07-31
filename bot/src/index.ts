@@ -18,6 +18,7 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import { PubSub } from "graphql-subscriptions";
 import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
 import { UserResolver } from "./resolvers/userResolver.js";
+import { ApolloServerPluginDrainWsServer, ApolloServerPluginLogger } from "./apolloServerPlugins.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -27,7 +28,7 @@ const config = new Config();
 logger.info("Creating PubSub...");
 const pubSub = new PubSub();
 
-logger.info("Instanciating bot...");
+logger.info("Creating Bot...");
 const bot = await Bot.create(config, pubSub);
 
 logger.info("Building API schema...");
@@ -60,24 +61,10 @@ const server = new ApolloServer({
   schema,
   context: buildCreateContextFunction(bot, config),
   plugins: [
-    // Shutdown the HTTP server
     ApolloServerPluginDrainHttpServer({ httpServer }),
-
-    // Shutdown the WS server
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            await serverCleanup.dispose();
-          },
-        };
-      },
-    },
+    ApolloServerPluginDrainWsServer(serverCleanup),
+    ApolloServerPluginLogger(),
   ],
-  formatError: (e) => {
-    logger.error(`GraphQL Error : ${e.message}`);
-    return e;
-  },
 });
 
 logger.info("Starting Apollo server...");
@@ -85,7 +72,7 @@ await server.start();
 server.applyMiddleware({ app, path: "/" });
 const port = process.env.PORT || 3001;
 await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
-logger.info(`Listening on: http://localhost:${port}`);
+logger.info(`Listening on port ${port}`);
 
 process.addListener("SIGINT", () => {
   bot.shutdown();
