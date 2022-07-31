@@ -1,7 +1,6 @@
 import { GraphQLRequestContext, PluginDefinition } from "apollo-server-core";
 import { Disposable } from "graphql-ws";
-import crypto from "crypto";
-import logger from "./utils/logger.js";
+import { logger } from "./utils/logger.js";
 import { Context } from "./authentication.js";
 
 export function ApolloServerPluginDrainWsServer(serverCleanup: Disposable): PluginDefinition {
@@ -19,26 +18,16 @@ export function ApolloServerPluginDrainWsServer(serverCleanup: Disposable): Plug
 export function ApolloServerPluginLogger(): PluginDefinition {
   return {
     async requestDidStart(requestContext: GraphQLRequestContext<Context>) {
-      if (requestContext.request.operationName === "IntrospectionQuery") return; // TODO : Remove this
+      requestContext.logger = logger;
 
-      const requestLogger = logger.child({ requestId: crypto.randomUUID() });
-      requestContext.logger = requestLogger;
-      requestLogger.info(
-        {
-          operationName: requestContext.request.operationName,
-          query: requestContext.request.query,
-          variables: requestContext.request.variables,
-          user:
-            requestContext.context.user == null
-              ? undefined
-              : {
-                  id: requestContext.context.user.id,
-                  username: requestContext.context.user.username,
-                  discriminator: requestContext.context.user.discriminator,
-                },
-        },
-        "Request received"
-      );
+      let requestLog = `Recevied request named "${requestContext.request.operationName}"\n`;
+      requestLog += `query : ${requestContext.request.query}\n`;
+      requestLog += `variables : ${JSON.stringify(requestContext.request.variables)}\n`;
+      requestLog +=
+        requestContext.context.user == null
+          ? "user : undefined"
+          : `user : ${requestContext.context.user.username}#${requestContext.context.user.discriminator} (${requestContext.context.user.id})`;
+      logger.info(requestLog);
 
       return {
         async didEncounterErrors(requestContext) {

@@ -8,7 +8,7 @@ import { GuildResolver } from "./resolvers/guildResolver.js";
 import { SettingsResolver } from "./resolvers/settingsResolver.js";
 import { LogResolver } from "./resolvers/logResolver.js";
 import { SongResolver } from "./resolvers/songResolver.js";
-import logger from "./utils/logger.js";
+import { logger } from "./utils/logger.js";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
