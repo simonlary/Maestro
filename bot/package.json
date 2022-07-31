@@ -32,7 +32,6 @@
     "graphql-subscriptions": "^2.0.0",
     "graphql-ws": "^5.9.1",
     "libsodium-wrappers": "^0.7.10",
-    "node-fetch": "^3.2.9",
     "opusscript": "^0.0.8",
     "play-dl": "^1.9.5",
     "reflect-metadata": "^0.1.13",

@@ -1,5 +1,4 @@
-import { Snowflake } from "discord.js";
-import fetch from "node-fetch";
+import { REST, Routes, Snowflake } from "discord.js";
 import { Cache } from "./utils/cache.js";
 
 export interface UserData {
@@ -22,18 +21,8 @@ export async function getUserData(accessToken: string) {
 }
 
 async function fetchUserData(accessToken: string) {
-  const response = await fetch("https://discordapp.com/api/v9/users/@me", {
-    method: "get",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.ok) {
-    return (await response.json()) as UserData;
-  }
-
-  return undefined;
+  const rest = new REST({ authPrefix: "Bearer" }).setToken(accessToken);
+  return (await rest.get(Routes.user())) as UserData;
 }
 
 export interface GuildData {
@@ -52,16 +41,6 @@ export async function getGuildsData(accessToken: string) {
 }
 
 async function fetchGuildsData(accessToken: string) {
-  const response = await fetch("https://discordapp.com/api/v9/users/@me/guilds", {
-    method: "get",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  if (response.ok) {
-    return (await response.json()) as GuildData[];
-  }
-
-  return undefined;
+  const rest = new REST({ authPrefix: "Bearer" }).setToken(accessToken);
+  return (await rest.get(Routes.userGuilds())) as GuildData[];
 }
