@@ -1,8 +1,3 @@
-interface LogParameter {
-  name: string;
-  value: string;
-}
-
 interface Log {
   id: number;
   timestamp: string;
