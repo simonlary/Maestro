@@ -1,7 +1,4 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import { REST } from "@discordjs/rest";
-import { Routes } from "discord-api-types/rest/v10";
-import { Client } from "discord.js";
+import { Client, REST, Routes, SlashCommandBuilder } from "discord.js";
 import { Config } from "./config.js";
 
 export async function registerCommands(client: Client, config: Config) {
@@ -60,7 +57,7 @@ export async function registerCommands(client: Client, config: Config) {
 
   const commands = [play, stop, skip, pause, resume, queue, dashboard];
 
-  const rest = new REST({ version: "10" }).setToken(config.token);
+  const rest = new REST().setToken(config.token);
   if (config.debugGuilds.length === 0) {
     await rest.put(Routes.applicationCommands(applicationId), {
       body: commands,

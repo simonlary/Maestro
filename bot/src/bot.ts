@@ -1,4 +1,11 @@
-import { Client, CommandInteraction, Intents, Interaction, MessageEmbed, Snowflake } from "discord.js";
+import {
+  ChatInputCommandInteraction,
+  Client,
+  CommandInteraction,
+  EmbedBuilder,
+  Interaction,
+  Snowflake,
+} from "discord.js";
 import {
   AudioPlayer,
   AudioPlayerStatus,
@@ -46,7 +53,7 @@ export class Bot {
   public static async create(config: Config, pubSub: PubSubEngine) {
     logger.info("Creating discord.js client...");
     const client = new Client({
-      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES],
+      intents: ["Guilds", "GuildVoiceStates"],
     });
 
     logger.info("Instanciating bot...");
@@ -125,7 +132,7 @@ export class Bot {
   }
 
   private onInteractionCreate = async (interaction: Interaction) => {
-    if (!interaction.isCommand()) {
+    if (!interaction.isChatInputCommand()) {
       logger.warn(
         `User ${interaction.user.tag} (${interaction.user.id}) used an interaction that is not a command (${interaction.type}).`
       );
@@ -185,7 +192,7 @@ export class Bot {
     }
   };
 
-  private play = async (interaction: CommandInteraction) => {
+  private play = async (interaction: ChatInputCommandInteraction) => {
     if (interaction.guild == null) {
       await interaction.reply({ content: "You need to be in a server to use commands.", ephemeral: true });
       return;
@@ -253,7 +260,7 @@ export class Bot {
       this.guildUpdated(activeGuild.guildInfo.id);
     }
 
-    const embed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setTitle("Queued Song")
       .setColor(0x6bed0e)
       .setDescription(`[${song.title}](${song.url})`)
@@ -379,15 +386,18 @@ export class Bot {
       return;
     }
 
-    const embed = new MessageEmbed().setTitle("Current Queue").setColor(0x6bed0e);
+    const embed = new EmbedBuilder().setTitle("Current Queue").setColor(0x6bed0e);
     if (activeGuild.currentlyPlaying != null) {
-      embed.addField(
-        "Currently playing song",
-        `[${activeGuild.currentlyPlaying.title}](${activeGuild.currentlyPlaying.url})`
-      );
+      embed.addFields({
+        name: "Currently playing song",
+        value: `[${activeGuild.currentlyPlaying.title}](${activeGuild.currentlyPlaying.url})`,
+      });
     }
     if (activeGuild.queue.length > 0) {
-      embed.addField("Queue", activeGuild.queue.map((s, i) => `${i + 1}. [${s.title}](${s.url})`).join("\n"));
+      embed.addFields({
+        name: "Queue",
+        value: activeGuild.queue.map((s, i) => `${i + 1}. [${s.title}](${s.url})`).join("\n"),
+      });
     }
     await interaction.reply({ embeds: [embed], ephemeral: true });
   };
