@@ -1,24 +1,24 @@
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServer } from "apollo-server-express";
+import express from "express";
+import { PubSub } from "graphql-subscriptions";
+import { useServer } from "graphql-ws/lib/use/ws";
+import { createServer } from "http";
+import * as path from "path";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
+import { fileURLToPath } from "url";
+import { WebSocketServer } from "ws";
+import { ApolloServerPluginDrainWsServer, ApolloServerPluginLogger } from "./apolloServerPlugins.js";
+import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
 import { Bot } from "./bot.js";
 import { Config } from "./config.js";
-import * as path from "path";
-import { fileURLToPath } from "url";
 import { GuildResolver } from "./resolvers/guildResolver.js";
-import { SettingsResolver } from "./resolvers/settingsResolver.js";
 import { LogResolver } from "./resolvers/logResolver.js";
+import { SettingsResolver } from "./resolvers/settingsResolver.js";
 import { SongResolver } from "./resolvers/songResolver.js";
-import { logger } from "./utils/logger.js";
-import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import express from "express";
-import { createServer } from "http";
-import { WebSocketServer } from "ws";
-import { useServer } from "graphql-ws/lib/use/ws";
-import { PubSub } from "graphql-subscriptions";
-import { authChecker, buildCreateContextFunction, buildCreateWsContextFunction } from "./authentication.js";
 import { UserResolver } from "./resolvers/userResolver.js";
-import { ApolloServerPluginDrainWsServer, ApolloServerPluginLogger } from "./apolloServerPlugins.js";
+import { logger } from "./utils/logger.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

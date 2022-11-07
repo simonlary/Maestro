@@ -2,9 +2,9 @@ import { AudioPlayerStatus } from "@discordjs/voice";
 import { Snowflake } from "discord.js";
 import { Arg, Authorized, Ctx, FieldResolver, Mutation, Query, Resolver, Root, Subscription } from "type-graphql";
 import { Context } from "../authentication.js";
+import { GuildData } from "../discord.js";
 import { Guild } from "../schema/guild.js";
 import { PlaybackStatus } from "../schema/playbackStatus.js";
-import { GuildData } from "../discord.js";
 
 @Resolver(Guild)
 export class GuildResolver {

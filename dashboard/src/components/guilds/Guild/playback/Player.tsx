@@ -8,8 +8,8 @@ import {
   useSkipMutation,
 } from "../../../../apollo/generated";
 import { formatDuration } from "../../../../utils/formatters";
-import empty from "./empty.mp3";
 import { Progress } from "./Progress";
+import empty from "./empty.mp3";
 
 interface PlayerProps {
   song: Song;

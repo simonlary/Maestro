@@ -1,7 +1,7 @@
 import { GraphQLRequestContext, PluginDefinition } from "apollo-server-core";
 import { Disposable } from "graphql-ws";
-import { logger } from "./utils/logger.js";
 import { Context } from "./authentication.js";
+import { logger } from "./utils/logger.js";
 
 export function ApolloServerPluginDrainWsServer(serverCleanup: Disposable): PluginDefinition {
   return {

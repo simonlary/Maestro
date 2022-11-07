@@ -1,7 +1,7 @@
-import { Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { Settings } from "../schema/settings.js";
 import { spawn } from "child_process";
+import { Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Context } from "../authentication.js";
+import { Settings } from "../schema/settings.js";
 
 @Resolver(Settings)
 export class SettingsResolver {

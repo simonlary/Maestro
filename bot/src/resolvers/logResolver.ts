@@ -1,6 +1,6 @@
 import { Arg, Authorized, Int, Query, Resolver } from "type-graphql";
-import { logger } from "../utils/logger.js";
 import { Log } from "../schema/log.js";
+import { logger } from "../utils/logger.js";
 
 @Resolver(Log)
 export class LogResolver {

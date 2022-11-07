@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
-import { GuildList } from "./GuildList/GuildList";
-import { useGuildsQuery } from "../../apollo/generated";
 import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { useGuildsQuery } from "../../apollo/generated";
+import { GuildList } from "./GuildList/GuildList";
 
 export function Guilds() {
   const { data, loading, startPolling, stopPolling } = useGuildsQuery();

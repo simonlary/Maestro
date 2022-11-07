@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserQuery } from "../apollo/generated";
 import { config } from "../config";
-import { Spinner } from "./controls/Spinner";
 import { NotAuthorized } from "./NotAuthorized";
+import { Spinner } from "./controls/Spinner";
 
 interface ProtectedRouteProps {
   requiresAdmin?: boolean;

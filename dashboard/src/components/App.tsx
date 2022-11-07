@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppBar } from "./AppBar";
+import { NotFound } from "./NotFound";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { GuildPage } from "./guilds/Guild/GuildPage";
 import { NoGuildPage } from "./guilds/Guild/NoGuildPage";
 import { Guilds } from "./guilds/Guilds";
 import { Login } from "./login/Login";
 import { LoginCallback } from "./login/LoginCallback";
 import { Logs } from "./logs/Logs";
-import { NotFound } from "./NotFound";
-import { ProtectedRoute } from "./ProtectedRoute";
 import { Settings } from "./settings/Settings";
 
 export function App() {

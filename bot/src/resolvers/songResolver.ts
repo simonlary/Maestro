@@ -1,7 +1,7 @@
+import crypto from "crypto";
 import playdl from "play-dl";
 import { Arg, Authorized, Query, Resolver } from "type-graphql";
 import { Song } from "../schema/song.js";
-import crypto from "crypto";
 
 @Resolver(Song)
 export class SongResolver {

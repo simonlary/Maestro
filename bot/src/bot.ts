@@ -1,12 +1,4 @@
 import {
-  ChatInputCommandInteraction,
-  Client,
-  CommandInteraction,
-  EmbedBuilder,
-  Interaction,
-  Snowflake,
-} from "discord.js";
-import {
   AudioPlayer,
   AudioPlayerStatus,
   AudioResource,
@@ -18,11 +10,19 @@ import {
   VoiceConnectionStatus,
 } from "@discordjs/voice";
 import crypto from "crypto";
+import {
+  ChatInputCommandInteraction,
+  Client,
+  CommandInteraction,
+  EmbedBuilder,
+  Interaction,
+  Snowflake,
+} from "discord.js";
+import { PubSubEngine } from "graphql-subscriptions";
 import playdl from "play-dl";
 import { Config } from "./config.js";
 import { registerCommands } from "./registerCommands.js";
 import { logger } from "./utils/logger.js";
-import { PubSubEngine } from "graphql-subscriptions";
 
 interface GuildInfo {
   id: Snowflake;

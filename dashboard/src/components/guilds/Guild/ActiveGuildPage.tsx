@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
+import { PlaybackStatus } from "../../../apollo/generated";
+import { Player } from "./playback/Player";
 import { Queue } from "./queue/Queue";
 import { Search } from "./search/Search";
-import { useEffect, useState } from "react";
-import { Player } from "./playback/Player";
-import { PlaybackStatus } from "../../../apollo/generated";
 
 interface ActiveGuildPageProps {
   guildId: string;

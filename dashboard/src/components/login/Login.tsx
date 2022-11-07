@@ -1,6 +1,7 @@
 import { Navigate, useSearchParams } from "react-router-dom";
 import { config } from "../../config";
 import { Button } from "../controls/Button";
+
 export function Login() {
   const [searchParams] = useSearchParams();
 

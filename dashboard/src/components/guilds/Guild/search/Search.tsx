@@ -1,9 +1,9 @@
-import { BiSearchAlt2 } from "react-icons/bi";
-import { SearchEntry } from "./SearchEntry";
 import { useEffect, useState } from "react";
+import { BiSearchAlt2 } from "react-icons/bi";
 import { useSearchSongsLazyQuery } from "../../../../apollo/generated";
-import { Spinner } from "../../../controls/Spinner";
 import { useDebounce } from "../../../../utils/useDebounce";
+import { Spinner } from "../../../controls/Spinner";
+import { SearchEntry } from "./SearchEntry";
 
 export function Search({ guildId }: { guildId: string }) {
   const [getSongs, { data: songsQuery, loading }] = useSearchSongsLazyQuery();
