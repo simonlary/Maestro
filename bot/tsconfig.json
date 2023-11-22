@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2021",
     "module": "es2022",
-    "moduleResolution": "node16",
+    "moduleResolution": "bundler",
     "outDir": "out",
     "strict": true,
     "esModuleInterop": true,
